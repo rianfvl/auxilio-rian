@@ -1,290 +1,640 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lan="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Rian UI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#820ad1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Nubank</title>
+<link rel="icon" href="https://logodownload.org/wp-content/uploads/2019/08/nubank-logo-3.png">
+<link rel="apple-touch-icon" href="https://logodownload.org/wp-content/uploads/2019/08/nubank-logo-3.png">
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk51YmFuayIsCiAgInNob3J0X25hbWUiOiAiTnViYW5rIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiM4MjBhZDEiLAogICJ0aGVtZV9jb2xvciI6ICIjODIwYWQxIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9sb2dvZG93bmxvYWQub3JnL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE5LzA4L251YmFuay1sb2dvLTMucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9LAogICAgewogICAgICAic3JjIjogImh0dHBzOi8vbG9nb2Rvd25sb2FkLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAxOS8wOC9udWJhbmstbG9nby0zLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;-webkit-tap-highlight-color:transparent;user-select:none}
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   background:#000;
   color:#fff;
+  position:relative;
   overflow:hidden;
 }
 
-/* ===== LOGIN ===== */
-#login{
+/* ===== MATRIX BACKGROUND ===== */
+#matrix{
   position:fixed;
-  inset:0;
-  background:#000;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+
+/* ===== LOGIN ===== */
+#keyLock{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.95);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+  overflow:hidden;
+}
+#matrixLogin{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+#keyCard{
+  position:relative;
+  background:rgba(10,0,0,.95);
+  padding:28px;border-radius:24px;
+  width:320px;text-align:center;
+  box-shadow:0 0 45px rgba(255,0,0,.7);
+  z-index:2;
+  border:2px solid #ff0000;
+}
+#keyCard .brand{
+  letter-spacing:4px;
+  color:#ff6a6a;
+  margin-bottom:14px;
+  font-size:18px;
+  font-weight:700;
+}
+#keyCard input{
+  width:100%;
+  padding:12px;
+  border-radius:999px;
+  border:1px solid #ff0000;
+  background:#120000;
+  color:#fff;
+  text-align:center;
+  margin-bottom:12px;
+}
+#keyCard button{
+  width:100%;
+  padding:12px;
+  border-radius:999px;
+  border:none;
+  background:linear-gradient(135deg,#ff0000,#cc0000);
+  color:#fff;
+  font-weight:700;
+  box-shadow:0 0 22px #ff0000;
+  cursor:pointer;
+  transition:.3s;
+}
+#keyCard button:hover{
+  background:linear-gradient(135deg,#cc0000,#990000);
+  transform:scale(1.05);
+}
+#keyMsg{margin-top:8px;font-size:12px;color:#ff7777}
+
+/* ===== PAINEL ===== */
+.frame{
+  padding:6px;
+  border-radius:26px;
+  background:#ff0000;
+  box-shadow:0 0 55px rgba(255,0,0,.9);
+  position:relative;
+  z-index:10;
+}
+.app{
+  width:380px;
+  height:350px;
+  background:#0a0000;
+  border-radius:22px;
+  display:flex;
+  overflow:hidden;
+}
+.sidebar{
+  width:64px;
+  background:#120000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:14px 0;
+}
+.icon{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:#1a0000;
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:200;
+  cursor:pointer;
+  transition:.3s;
 }
-.login-box{
-  background:#111;
-  padding:30px;
-  width:260px;
-  border-radius:15px;
-  text-align:center;
-  border:1px solid #8e2bc9;
+.icon:hover{
+  transform:scale(1.1);
 }
-.login-box h2{color:#8e2bc9;margin-top:0}
-.login-box input{
-  width:100%;
-  padding:12px;
-  background:#000;
-  border:1px solid #333;
-  color:white;
-  border-radius:8px;
-  text-align:center;
-}
-.login-box button{
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  background:#8e2bc9;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-}
-.error{color:#ff4444;font-size:12px;display:none}
+.icon svg{width:22px;height:22px;stroke:#666;fill:none}
+.icon.active{box-shadow:0 0 18px #ff0000}
+.icon.active svg{stroke:#ff0000}
 
-/* ===== SITE ===== */
-#store{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:none;
-  overflow:auto;
-  z-index:1;
-}
-.header{
-  padding:15px;
-  text-align:center;
-  background:#111;
-  color:#8e2bc9;
-  font-weight:bold;
-}
-.card{
-  margin:15px;
-  padding:20px;
-  background:#111;
-  border:1px solid #8e2bc9;
-  border-radius:15px;
-}
-.buy{
-  margin-top:10px;
-  padding:10px;
-  background:#8e2bc9;
-  text-align:center;
-  border-radius:10px;
-}
-
-/* ===== MENU ===== */
-#menu{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  z-index:100;
-}
-.menu-box{
-  width:340px;
-  margin:60px auto;
-  background:#111;
-  border-radius:15px;
-  padding:15px;
-}
-.tabs{
+.main{flex:1;padding:12px;overflow-y:auto}
+.header{color:#ff0000;font-weight:700;margin-bottom:10px;text-shadow:0 0 10px #ff0000}
+.item{
+  background:linear-gradient(180deg,#1a0000,#0f0000);
+  border-radius:999px;
+  padding:10px 14px;
   display:flex;
-  gap:10px;
+  justify-content:space-between;
+  align-items:center;
   margin-bottom:10px;
+  border:1px solid #330000;
 }
-.tab{
-  flex:1;
-  padding:10px;
-  text-align:center;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
-}
-.tab.active{background:#8e2bc9}
-.tab.off{border:2px solid #8e2bc9;color:#8e2bc9}
 
-.box{
-  background:#1b1b1b;
+.toggle{
+  width:44px;height:22px;
+  background:#333;
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+  transition:.3s;
+}
+.toggle::after{
+  content:'';
+  width:16px;height:16px;
+  background:#666;
+  border-radius:50%;
+  position:absolute;
+  top:3px;left:4px;
+  transition:.2s;
+}
+.toggle.on{background:#ff0000;box-shadow:0 0 10px #ff0000}
+.toggle.on::after{left:24px;background:#fff}
+
+.range{width:100%;appearance:none;height:6px;border-radius:6px;background:#333}
+.range::-webkit-slider-thumb{
+  appearance:none;
+  width:18px;height:18px;
+  border-radius:50%;
+  background:#ff0000;
+  box-shadow:0 0 12px #ff0000;
+  cursor:pointer;
+}
+
+.value{color:#ff0000;font-weight:800;text-shadow:0 0 8px #ff0000}
+.btn{
+  width:100%;
   padding:12px;
-  border-radius:12px;
+  border:none;
+  border-radius:999px;
+  background:#ff0000;
+  color:#fff;
+  font-weight:700;
   margin-bottom:8px;
+  box-shadow:0 0 18px #ff0000;
   cursor:pointer;
-  border-left:4px solid transparent;
+  transition:.3s;
 }
-.box.active{
-  background:rgba(142,43,201,.25);
-  border-left:4px solid #8e2bc9;
+.btn:hover{
+  background:#cc0000;
+  transform:scale(1.02);
+}
+.btn:disabled{
+  background:#666;
+  box-shadow:none;
+  cursor:not-allowed;
+  opacity:0.5;
 }
 
-.slider{
-  background:#161616;
-  padding:10px;
-  border-radius:10px;
-  margin-bottom:10px;
+.status{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:#1a0000;
+  border-radius:999px;
+  padding:8px 12px;
+  margin-bottom:6px;
+  border:1px solid #330000;
 }
-input[type=range]{width:100%;accent-color:#8e2bc9}
-
-.close{
-  background:#8e2bc9;
-  padding:12px;
+.dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:#00ff00;
+  box-shadow:0 0 10px #00ff00;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.4}
+}
+.log{
+  background:#050000;
   border-radius:12px;
-  text-align:center;
-  font-weight:bold;
-  cursor:pointer;
+  padding:8px;
+  font-size:12px;
+  color:#ff3333;
+  height:90px;
+  overflow:auto;
+  font-family:monospace;
+  border:1px solid #330000;
 }
 
-/* ===== FOV ===== */
-#fovCanvas{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:9999;
+.tab{display:none}
+.tab.active{display:block}
+
+#installBtn{
+  background:linear-gradient(135deg,#1db954,#1ed760);
+  box-shadow:0 0 18px #1db954;
+  color:#000;
+}
+#installBtn:hover{
+  background:linear-gradient(135deg,#1ed760,#1db954);
+}
+
+.btn-info{
+  background:linear-gradient(135deg,#0099ff,#0066cc);
+  box-shadow:0 0 18px #0099ff;
+}
+.btn-info:hover{
+  background:linear-gradient(135deg,#0066cc,#0099ff);
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="fovCanvas"></canvas>
+<!-- MATRIX BACKGROUND -->
+<canvas id="matrix"></canvas>
 
 <!-- LOGIN -->
-<div id="login">
-  <div class="login-box">
-    <h2>Acesso Rian</h2>
-    <input id="key" type="password" placeholder="Digite a key">
-    <div class="error" id="err">Key incorreta</div>
-    <button onclick="checkLogin()">Entrar</button>
+<div id="keyLock">
+  <canvas id="matrixLogin"></canvas>
+  <div id="keyCard">
+    <div class="brand">RIAN CHEATS</div>
+    <input id="keyInput" placeholder="Digite sua key" autocomplete="off">
+    <button onclick="ativarKey()">ENTRAR</button>
+    <div id="keyMsg"></div>
   </div>
 </div>
 
-<!-- SITE -->
-<div id="store">
-  <div class="header">RIAN STORE</div>
-  <div class="card">
-    <h3>SENSI IPHONE</h3>
-    <div class="buy">R$ 15,00</div>
+<!-- PAINEL -->
+<div class="frame">
+<div class="app">
+
+<div class="sidebar">
+  <div class="icon active" onclick="openTab('aim',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle></svg>
   </div>
-  <div class="card">
-    <h3>SENSI ANDROID</h3>
-    <div class="buy">R$ 10,00</div>
+  <div class="icon" onclick="openTab('arma',this)">
+    <svg viewBox="0 0 24 24"><path d="M3 12h18M9 8v8"></path></svg>
+  </div>
+  <div class="icon" onclick="openTab('div',this)">
+    <svg viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6"></rect>
+      <rect x="14" y="4" width="6" height="6"></rect>
+      <rect x="4" y="14" width="6" height="6"></rect>
+      <rect x="14" y="14" width="6" height="6"></rect>
+    </svg>
+  </div>
+  <div class="icon" onclick="openTab('seg',this)">
+    <svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-8 8-8 8s-8-3-8-8V7z"></path></svg>
+  </div>
+  <div class="icon" onclick="openTab('inj',this)">
+    <svg viewBox="0 0 24 24"><path d="M4 20l16-16M14 4l6 6"></path></svg>
+  </div>
+  <div class="icon" onclick="openTab('info',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+  </div>
+</div>
+
+<div class="main">
+
+<div id="aim" class="tab active">
+  <div class="header">AIMBOT</div>
+  <div class="item"><span>Aimbot 89%</span><div class="toggle"></div></div>
+  <div class="item"><span>Aumentar Precisão</span><div class="toggle"></div></div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span>PRECISÃO</span>
+    <input type="range" min="0" max="10" value="0" step="1" class="range" oninput="fov.innerText=this.value">
+    <span class="value" id="fov">0</span>
   </div>
 </div>
 
-<!-- MENU -->
-<div id="menu">
-  <div class="menu-box">
-    <div class="tabs">
-      <div id="tAim" class="tab active" onclick="showTab('aim')">Aimbot</div>
-      <div id="tEsp" class="tab off" onclick="showTab('esp')">ESP</div>
-    </div>
+<div id="arma" class="tab">
+  <div class="header">ARMA</div>
+  <div class="item"><span>Sem Recuo</span><div class="toggle"></div></div>
+  <div class="item"><span>Precisão Avançada</span><div class="toggle"></div></div>
+</div>
 
-    <div id="aimTab">
-      <div class="box" onclick="toggle(this)">ENEABLE Precision</div>
-      <div class="box" onclick="toggle(this)">ENEABLE Tricking</div>
-      <div class="slider">
-        Posição: <b id="posTxt" style="color:#8e2bc9">Head</b>
-        <input type="range" min="0" max="2" value="0" oninput="updatePos(this.value)">
-      </div>
-    </div>
+<div id="div" class="tab">
+  <div class="header">DIVERSOS</div>
+  <div class="item"><span>ativar 120 FPS</span><div class="toggle"></div></div>
+  <div class="item"><span>ativar OTIMIZAÇÃO</span><div class="toggle"></div></div>
+  
+  <div class="header" style="margin-top:20px">INSTALAR APP</div>
+  <button class="btn" id="installBtn" onclick="instalarPWA()" style="display:none">
+    📱 INSTALAR APLICATIVO
+  </button>
+  <div style="font-size:12px;color:#999;text-align:center" id="pwaMsg">App já instalado ou não disponível</div>
+</div>
 
-    <div id="espTab" style="display:none">
-      <div class="box" onclick="toggle(this)">ENABLE Magnetismo</div>
-      <div class="box" onclick="toggleFov(this)">Draw FOV</div>
-      <div class="slider">
-        FOV: <b id="fovTxt" style="color:#8e2bc9">0</b>
-        <input type="range" min="0" max="400" value="0" oninput="updateFov(this.value)">
-      </div>
-    </div>
-
-    <div class="close" onclick="closeMenu()">FECHAR</div>
+<div id="seg" class="tab">
+  <div class="header">SEGURANÇA</div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span>Nível</span>
+    <input type="range" min="0" max="100" value="0" class="range" oninput="sec.innerText=this.value">
+    <span class="value" id="sec">0</span>
   </div>
 </div>
+
+<div id="inj" class="tab">
+  <div class="header">INJEÇÃO</div>
+
+  <button class="btn" onclick="abrirFF('com.dts.freefireth')">ABRIR FREE FIRE</button>
+  <button class="btn" onclick="abrirFF('com.dts.freefiremax')">ABRIR FREE FIRE MAX</button>
+
+  <div class="status" id="status" style="display:none">
+    <div class="dot"></div>
+    <span id="statusText">Injeção em andamento…</span>
+  </div>
+
+  <div class="log" id="log"></div>
+</div>
+
+<div id="info" class="tab">
+  <div class="header">INFORMAÇÕES</div>
+  
+  <div style="text-align:center;padding:20px">
+    <div style="font-size:24px;margin-bottom:15px">👨‍💻</div>
+    <div style="font-size:16px;font-weight:700;color:#ff0000;margin-bottom:10px">CRIADOR</div>
+    <div style="font-size:14px;color:#fff;margin-bottom:20px">Rian/monite</div>
+    <button class="btn btn-info" onclick="window.open('https://discord.gg/6jUdx6marp', '_blank')">🔗 DISCORD OFICIAL</button>
+  </div>
+
+  <div class="header" style="margin-top:20px">COR DO TEMA</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px">
+    <div onclick="trocarCor('#ff0000')" style="width:50px;height:50px;background:#ff0000;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
+    <div onclick="trocarCor('#00ff00')" style="width:50px;height:50px;background:#00ff00;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
+    <div onclick="trocarCor('#0099ff')" style="width:50px;height:50px;background:#0099ff;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
+    <div onclick="trocarCor('#ff00ff')" style="width:50px;height:50px;background:#ff00ff;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
+    <div onclick="trocarCor('#ffaa00')" style="width:50px;height:50px;background:#ffaa00;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- MATRIX ANIMATION -->
+<script>
+// Matrix para o fundo principal
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+// Matrix para a tela de login
+const canvasLogin = document.getElementById('matrixLogin');
+const ctxLogin = canvasLogin.getContext('2d');
+
+let w, h, columns, drops;
+let wLogin, hLogin, columnsLogin, dropsLogin;
+
+function initMatrix() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  
+  columns = Math.floor(w / 20);
+  drops = [];
+  
+  for(let i = 0; i < columns; i++) {
+    drops[i] = Math.random() * -100;
+  }
+}
+
+function initMatrixLogin() {
+  wLogin = canvasLogin.width = window.innerWidth;
+  hLogin = canvasLogin.height = window.innerHeight;
+  
+  columnsLogin = Math.floor(wLogin / 20);
+  dropsLogin = [];
+  
+  for(let i = 0; i < columnsLogin; i++) {
+    dropsLogin[i] = Math.random() * -100;
+  }
+}
+
+const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01';
+const charArray = chars.split('');
+let corMatrix = '#ff0000';
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctx.fillRect(0, 0, w, h);
+  
+  ctx.fillStyle = corMatrix;
+  ctx.font = '15px monospace';
+  
+  for(let i = 0; i < drops.length; i++) {
+    const char = charArray[Math.floor(Math.random() * charArray.length)];
+    ctx.fillText(char, i * 20, drops[i] * 20);
+    
+    if(drops[i] * 20 > h && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+function drawMatrixLogin() {
+  ctxLogin.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctxLogin.fillRect(0, 0, wLogin, hLogin);
+  
+  ctxLogin.fillStyle = corMatrix;
+  ctxLogin.font = '15px monospace';
+  
+  for(let i = 0; i < dropsLogin.length; i++) {
+    const char = charArray[Math.floor(Math.random() * charArray.length)];
+    ctxLogin.fillText(char, i * 20, dropsLogin[i] * 20);
+    
+    if(dropsLogin[i] * 20 > hLogin && Math.random() > 0.975) {
+      dropsLogin[i] = 0;
+    }
+    dropsLogin[i]++;
+  }
+}
+
+initMatrix();
+initMatrixLogin();
+window.addEventListener('resize', () => {
+  initMatrix();
+  initMatrixLogin();
+});
+setInterval(drawMatrix, 35);
+setInterval(drawMatrixLogin, 35);
+</script>
+
+<!-- PWA INSTALL -->
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').style.display = 'block';
+  document.getElementById('pwaMsg').style.display = 'none';
+});
+
+function instalarPWA() {
+  if (!deferredPrompt) {
+    alert('App já está instalado ou não pode ser instalado neste dispositivo');
+    return;
+  }
+  
+  deferredPrompt.prompt();
+  
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('PWA instalado');
+      document.getElementById('installBtn').style.display = 'none';
+      document.getElementById('pwaMsg').style.display = 'block';
+      document.getElementById('pwaMsg').innerText = '✅ App instalado com sucesso!';
+    }
+    deferredPrompt = null;
+  });
+}
+
+// Registrar Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZnVuY3Rpb24oZXZlbnQpIHsKICBzZWxmLnNraXBXYWl0aW5nKCk7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdhY3RpdmF0ZScsIGZ1bmN0aW9uKGV2ZW50KSB7CiAgcmV0dXJuIHNlbGYuY2xpZW50cy5jbGFpbSgpOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCBmdW5jdGlvbihldmVudCkgewogIGV2ZW50LnJlc3BvbmRXaXRoKGZldGNoKGV2ZW50LnJlcXVlc3QpKTsKfSk7')
+    .catch(() => {});
+}
+</script>
+
+<!-- KEY SYSTEM -->
+<script>
+function ativarKey() {
+  const key = document.getElementById('keyInput').value.trim();
+  const keyMsg = document.getElementById('keyMsg');
+  
+  if(key === 'MONITECHEATSNOTOPO') {
+    document.getElementById('keyLock').style.display = 'none';
+    keyMsg.innerText = '';
+  } else {
+    keyMsg.innerText = '❌ Key inválida';
+  }
+}
+
+// Permitir Enter para logar
+document.getElementById('keyInput').addEventListener('keypress', function(e) {
+  if(e.key === 'Enter') {
+    ativarKey();
+  }
+});
+</script>
 
 <script>
-/* ===== SOM ===== */
-const audio=new (window.AudioContext||window.webkitAudioContext)();
-function sound(f){
-  const o=audio.createOscillator(),g=audio.createGain();
-  o.connect(g);g.connect(audio.destination);
-  o.frequency.value=f;
-  g.gain.setValueAtTime(.15,audio.currentTime);
-  g.gain.exponentialRampToValueAtTime(.01,audio.currentTime+.12);
-  o.start();o.stop(audio.currentTime+.12);
+function openTab(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.icon').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+}
+document.querySelectorAll('.toggle').forEach(t=>t.onclick=()=>t.classList.toggle('on'));
+
+function timeNow(){
+  return new Date().toLocaleTimeString('pt-BR',{hour12:false});
 }
 
-/* ===== LOGIN ===== */
-function checkLogin(){
-  if(key.value==="sensi"){
-    login.style.display="none";
-    store.style.display="block";
-    sound(900);
-  }else{
-    err.style.display="block";
-    sound(300);
-  }
+function trocarCor(cor){
+  corMatrix = cor;
+  
+  // Se for branco, usar preto para texto
+  const corTexto = (cor === '#ffffff') ? '#000000' : cor;
+  
+  // Trocar cor do frame
+  document.querySelector('.frame').style.background = cor;
+  document.querySelector('.frame').style.boxShadow = `0 0 55px ${cor}`;
+  
+  // Trocar cor dos headers
+  document.querySelectorAll('.header').forEach(h => {
+    h.style.color = corTexto;
+    h.style.textShadow = `0 0 10px ${cor}`;
+  });
+  
+  // Trocar cor dos toggles ativos
+  document.querySelectorAll('.toggle.on').forEach(t => {
+    t.style.background = cor;
+    t.style.boxShadow = `0 0 10px ${cor}`;
+  });
+  
+  // Trocar cor dos botões
+  document.querySelectorAll('.btn:not(.btn-info)').forEach(b => {
+    if(!b.disabled){
+      b.style.background = cor;
+      b.style.boxShadow = `0 0 18px ${cor}`;
+      b.style.color = (cor === '#ffffff' || cor === '#00ff00' || cor === '#ffaa00') ? '#000' : '#fff';
+    }
+  });
+  
+  // Trocar cor dos valores (precisão e nível)
+  document.querySelectorAll('.value').forEach(v => {
+    v.style.color = corTexto;
+    v.style.textShadow = `0 0 8px ${cor}`;
+  });
+  
+  // Trocar cor dos ícones ativos na sidebar
+  document.querySelectorAll('.icon.active').forEach(i => {
+    i.style.boxShadow = `0 0 18px ${cor}`;
+  });
+  
+  document.querySelectorAll('.icon.active svg').forEach(s => {
+    s.style.stroke = corTexto;
+  });
+  
+  // Trocar cor do slider (range)
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .range::-webkit-slider-thumb {
+      background: ${cor} !important;
+      box-shadow: 0 0 12px ${cor} !important;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
-/* ===== MENU ===== */
-function openMenu(){menu.style.display="block";sound(800)}
-function closeMenu(){menu.style.display="none";sound(400)}
-function toggle(el){el.classList.toggle("active");sound(el.classList.contains("active")?700:350)}
-function showTab(t){
-  tAim.className=t==="aim"?"tab active":"tab off";
-  tEsp.className=t==="esp"?"tab active":"tab off";
-  aimTab.style.display=t==="aim"?"block":"none";
-  espTab.style.display=t==="aim"?"none":"block";
-  sound(600);
-}
+function abrirFF(packageName){
+  const log=document.getElementById('log');
+  const status=document.getElementById('status');
+  const text=document.getElementById('statusText');
 
-/* ===== POS ===== */
-function updatePos(v){posTxt.innerText=["Head","Neck","Body"][v];sound(650)}
+  status.style.display="flex";
+  text.innerText="Abrindo jogo...";
 
-/* ===== FOV ===== */
-const canvas=document.getElementById("fovCanvas"),ctx=canvas.getContext("2d");
-let fovOn=false,fovR=0;
-function toggleFov(el){
-  fovOn=!fovOn;
-  el.classList.toggle("active");
-  drawFov();
-  sound(fovOn?850:350);
-}
-function updateFov(v){fovR=v;fovTxt.innerText=v;drawFov()}
-function drawFov(){
-  canvas.width=innerWidth;canvas.height=innerHeight;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(fovOn&&fovR>0){
-    ctx.strokeStyle="#8e2bc9";
-    ctx.lineWidth=2;
-    ctx.shadowBlur=10;
-    ctx.shadowColor="#8e2bc9";
-    ctx.beginPath();
-    ctx.arc(canvas.width/2,canvas.height/2,fovR,0,Math.PI*2);
-    ctx.stroke();
-  }
-}
-window.onresize=drawFov;
+  const tipo = packageName.includes('max') ? 'Free Fire MAX' : 'Free Fire';
+  const scheme = packageName.includes('max') ? 'freefiremax' : 'freefire';
 
-/* ===== INSERT + 3 DEDOS ===== */
-document.addEventListener("keydown",e=>{
-  if(e.key==="Insert") openMenu();
-});
-document.addEventListener("touchstart",e=>{
-  if(e.touches.length===3){
-    openMenu();
-  }
-});
+  log.innerHTML=
+    `[${timeNow()}] (SISTEMA) Iniciando processo...<br>`+
+    `[${timeNow()}] (INFO) ${tipo} selecionado<br>`+
+    `[${timeNow()}] (OK) Abrindo ${tipo}...<br>`;
+
+  // Detectar se é iPhone/iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  
+  setTimeout(() => {
+    if (isIOS) {
+      // Abrir no iPhone direto sem App Store
+      const url = packageName.includes('max') 
+        ? 'freefire-max://' 
+        : 'freefire://';
+      window.location.href = url;
+    } else {
+      // Abrir no Android direto
+      window.location.href = `intent://#Intent;scheme=${scheme};package=${packageName};end`;
+    }
+  }, 500);
+}
 </script>
 
 </body>
