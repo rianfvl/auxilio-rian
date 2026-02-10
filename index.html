@@ -1,641 +1,256 @@
 <!DOCTYPE html>
-<html lan="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#820ad1">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Nubank</title>
-<link rel="icon" href="https://logodownload.org/wp-content/uploads/2019/08/nubank-logo-3.png">
-<link rel="apple-touch-icon" href="https://logodownload.org/wp-content/uploads/2019/08/nubank-logo-3.png">
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk51YmFuayIsCiAgInNob3J0X25hbWUiOiAiTnViYW5rIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiM4MjBhZDEiLAogICJ0aGVtZV9jb2xvciI6ICIjODIwYWQxIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9sb2dvZG93bmxvYWQub3JnL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE5LzA4L251YmFuay1sb2dvLTMucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9LAogICAgewogICAgICAic3JjIjogImh0dHBzOi8vbG9nb2Rvd25sb2FkLm9yZy93cC1jb250ZW50L3VwbG9hZHMvMjAxOS8wOC9udWJhbmstbG9nby0zLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RODRIGUES SHOP | OFICIAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF4500;
+            --primary-glow: rgba(255, 69, 0, 0.4);
+            --bg: #050505;
+            --card-bg: rgba(12, 12, 12, 0.98);
+            --text: #ffffff;
+            --grid-color: rgba(255, 69, 0, 0.08);
+            --discord: #5865F2;
+            --pix: #32BCAD;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+        body {
+            margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg);
+            background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px; color: var(--text); line-height: 1.6; overflow-x: hidden;
+        }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;-webkit-tap-highlight-color:transparent;user-select:none}
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#000;
-  color:#fff;
-  position:relative;
-  overflow:hidden;
-}
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; text-align: center; }
 
-/* ===== MATRIX BACKGROUND ===== */
-#matrix{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  z-index:0;
-}
+        /* Floating Discord */
+        .floating-discord {
+            position: fixed; right: 20px; bottom: 20px; background: var(--discord);
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5); z-index: 9999; transition: 0.3s; cursor: pointer;
+        }
+        .floating-discord svg { width: 30px; fill: white; }
 
-/* ===== LOGIN ===== */
-#keyLock{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.95);
-  display:flex;align-items:center;justify-content:center;
-  z-index:9999;
-  overflow:hidden;
-}
-#matrixLogin{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  z-index:0;
-}
-#keyCard{
-  position:relative;
-  background:rgba(10,0,0,.95);
-  padding:28px;border-radius:24px;
-  width:320px;text-align:center;
-  box-shadow:0 0 45px rgba(255,0,0,.7);
-  z-index:2;
-  border:2px solid #ff0000;
-}
-#keyCard .brand{
-  letter-spacing:4px;
-  color:#ff6a6a;
-  margin-bottom:14px;
-  font-size:18px;
-  font-weight:700;
-}
-#keyCard input{
-  width:100%;
-  padding:12px;
-  border-radius:999px;
-  border:1px solid #ff0000;
-  background:#120000;
-  color:#fff;
-  text-align:center;
-  margin-bottom:12px;
-}
-#keyCard button{
-  width:100%;
-  padding:12px;
-  border-radius:999px;
-  border:none;
-  background:linear-gradient(135deg,#ff0000,#cc0000);
-  color:#fff;
-  font-weight:700;
-  box-shadow:0 0 22px #ff0000;
-  cursor:pointer;
-  transition:.3s;
-}
-#keyCard button:hover{
-  background:linear-gradient(135deg,#cc0000,#990000);
-  transform:scale(1.05);
-}
-#keyMsg{margin-top:8px;font-size:12px;color:#ff7777}
+        .shop-header { 
+            font-size: clamp(2rem, 8vw, 4rem); font-weight: 900; color: var(--primary); 
+            text-transform: uppercase; letter-spacing: 5px; text-shadow: 0 0 15px var(--primary-glow);
+        }
 
-/* ===== PAINEL ===== */
-.frame{
-  padding:6px;
-  border-radius:26px;
-  background:#ff0000;
-  box-shadow:0 0 55px rgba(255,0,0,.9);
-  position:relative;
-  z-index:10;
-}
-.app{
-  width:380px;
-  height:350px;
-  background:#0a0000;
-  border-radius:22px;
-  display:flex;
-  overflow:hidden;
-}
-.sidebar{
-  width:64px;
-  background:#120000;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
-  padding:14px 0;
-}
-.icon{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:#1a0000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition:.3s;
-}
-.icon:hover{
-  transform:scale(1.1);
-}
-.icon svg{width:22px;height:22px;stroke:#666;fill:none}
-.icon.active{box-shadow:0 0 18px #ff0000}
-.icon.active svg{stroke:#ff0000}
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px; margin: 40px 0; padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a1a;
+        }
+        .stat-item h4 { margin: 0; font-size: 1.5rem; color: var(--primary); }
+        .stat-item p { margin: 0; font-size: 0.7rem; text-transform: uppercase; opacity: 0.6; }
 
-.main{flex:1;padding:12px;overflow-y:auto}
-.header{color:#ff0000;font-weight:700;margin-bottom:10px;text-shadow:0 0 10px #ff0000}
-.item{
-  background:linear-gradient(180deg,#1a0000,#0f0000);
-  border-radius:999px;
-  padding:10px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-  border:1px solid #330000;
-}
+        /* Mod Promo Section */
+        .mod-promo {
+            background: linear-gradient(90deg, #111, #1a0800);
+            border: 1px solid var(--primary); padding: 25px; margin-bottom: 40px;
+            display: flex; align-items: center; justify-content: space-between; border-radius: 4px;
+            text-align: left; flex-wrap: wrap; gap: 20px;
+        }
 
-.toggle{
-  width:44px;height:22px;
-  background:#333;
-  border-radius:999px;
-  position:relative;
-  cursor:pointer;
-  transition:.3s;
-}
-.toggle::after{
-  content:'';
-  width:16px;height:16px;
-  background:#666;
-  border-radius:50%;
-  position:absolute;
-  top:3px;left:4px;
-  transition:.2s;
-}
-.toggle.on{background:#ff0000;box-shadow:0 0 10px #ff0000}
-.toggle.on::after{left:24px;background:#fff}
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 30px; }
+        .cat-btn { background: #111; border: 1px solid #222; padding: 12px; color: #777; cursor: pointer; font-weight: 900; text-transform: uppercase; font-size: 0.7rem; transition: 0.2s; }
+        .cat-btn.active { border-color: var(--primary); color: var(--primary); box-shadow: inset 0 0 10px var(--primary-glow); }
 
-.range{width:100%;appearance:none;height:6px;border-radius:6px;background:#333}
-.range::-webkit-slider-thumb{
-  appearance:none;
-  width:18px;height:18px;
-  border-radius:50%;
-  background:#ff0000;
-  box-shadow:0 0 12px #ff0000;
-  cursor:pointer;
-}
+        .products-grid { display: none; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; animation: fadeInUp 0.4s; }
+        .products-grid.active { display: grid; }
+        
+        .card { background: var(--card-bg); border: 1px solid #1a1a1a; padding: 25px; text-align: left; transition: 0.3s; }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .card .price { font-size: 2rem; font-weight: 900; margin: 15px 0; color: #fff; }
 
-.value{color:#ff0000;font-weight:800;text-shadow:0 0 8px #ff0000}
-.btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:999px;
-  background:#ff0000;
-  color:#fff;
-  font-weight:700;
-  margin-bottom:8px;
-  box-shadow:0 0 18px #ff0000;
-  cursor:pointer;
-  transition:.3s;
-}
-.btn:hover{
-  background:#cc0000;
-  transform:scale(1.02);
-}
-.btn:disabled{
-  background:#666;
-  box-shadow:none;
-  cursor:not-allowed;
-  opacity:0.5;
-}
+        .buy-btn { 
+            display: block; text-decoration: none; text-align: center;
+            background: var(--primary); color: white; border: none; width: 100%; padding: 12px; 
+            font-weight: 900; cursor: pointer; text-transform: uppercase; 
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+            box-sizing: border-box; transition: 0.3s;
+        }
+        .buy-btn:disabled { background: #333; cursor: not-allowed; opacity: 0.5; clip-path: none; }
 
-.status{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  background:#1a0000;
-  border-radius:999px;
-  padding:8px 12px;
-  margin-bottom:6px;
-  border:1px solid #330000;
-}
-.dot{
-  width:10px;height:10px;
-  border-radius:50%;
-  background:#00ff00;
-  box-shadow:0 0 10px #00ff00;
-  animation:pulse 1.5s infinite;
-}
-@keyframes pulse{
-  0%,100%{opacity:1}
-  50%{opacity:.4}
-}
-.log{
-  background:#050000;
-  border-radius:12px;
-  padding:8px;
-  font-size:12px;
-  color:#ff3333;
-  height:90px;
-  overflow:auto;
-  font-family:monospace;
-  border:1px solid #330000;
-}
+        /* Modal / Checkout */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .checkout-box { background: #0d0d0d; border: 1px solid var(--primary); width: 95%; max-width: 450px; padding: 30px; border-radius: 4px; position: relative; }
+        .pix-container { background: #151515; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #222; }
+        .pix-key { color: var(--pix); font-family: monospace; font-size: 1rem; word-break: break-all; margin: 10px 0; }
+        .terms-area { display: flex; align-items: flex-start; gap: 10px; text-align: left; margin: 15px 0; font-size: 0.75rem; color: #888; }
+        .terms-area input { accent-color: var(--primary); width: 18px; height: 18px; }
 
-.tab{display:none}
-.tab.active{display:block}
+        /* Page Modding */
+        #page-modding { display: none; text-align: left; animation: fadeInUp 0.4s; }
+        .modding-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 40px; background: #0a0a0a; padding: 40px; border: 1px solid #1a1a1a; }
+        .back-btn { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 10px 20px; cursor: pointer; margin-bottom: 20px; font-weight: 900; text-transform: uppercase; }
 
-#installBtn{
-  background:linear-gradient(135deg,#1db954,#1ed760);
-  box-shadow:0 0 18px #1db954;
-  color:#000;
-}
-#installBtn:hover{
-  background:linear-gradient(135deg,#1ed760,#1db954);
-}
-
-.btn-info{
-  background:linear-gradient(135deg,#0099ff,#0066cc);
-  box-shadow:0 0 18px #0099ff;
-}
-.btn-info:hover{
-  background:linear-gradient(135deg,#0066cc,#0099ff);
-}
-</style>
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-
 <body>
 
-<!-- MATRIX BACKGROUND -->
-<canvas id="matrix"></canvas>
+    <a href="https://discord.gg/6jUdx6marp" class="floating-discord" target="_blank">
+        <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.06,72.06,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.39,80.21a105.73,105.73,0,0,0,32.17,16.15,77.7,77.7,0,0,0,6.89-11.11,68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.72-27.49-4.59-51.05-19.54-72.14ZM42.45,65.69C36.18,65.69,31,60,31,53s5.07-12.59,11.44-12.59S54,46.13,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5.07-12.59,11.44-12.59S96.23,46.13,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+    </a>
 
-<!-- LOGIN -->
-<div id="keyLock">
-  <canvas id="matrixLogin"></canvas>
-  <div id="keyCard">
-    <div class="brand">RIAN CHEATS</div>
-    <input id="keyInput" placeholder="Digite sua key" autocomplete="off">
-    <button onclick="ativarKey()">ENTRAR</button>
-    <div id="keyMsg"></div>
-  </div>
-</div>
+    <div class="container">
+        <div id="page-home">
+            <div class="shop-header">RODRIGUES SHOP</div>
+            
+            <div class="stats-bar">
+                <div class="stat-item"><h4>+1.000</h4><p>Vendas Concluídas</p></div>
+                <div class="stat-item"><h4>+1.000</h4><p>Membros Ativos</p></div>
+                <div class="stat-item"><h4>100%</h4><p>Antiban Security</p></div>
+                <div class="stat-item"><h4 style="color:#00ff00">ONLINE</h4><p>Status</p></div>
+            </div>
 
-<!-- PAINEL -->
-<div class="frame">
-<div class="app">
+            <div class="mod-promo">
+                <div>
+                    <h3 style="margin:0; color:var(--primary)">CRIE SEU PRÓPRIO MOD</h3>
+                    <p style="margin:5px 0 0; opacity:0.7; font-size:0.8rem">Transforme suas ideias em softwares reais e funcionais.</p>
+                </div>
+                <button class="buy-btn" style="width:auto; padding: 12px 40px;" onclick="togglePage('modding')">SAIBA MAIS</button>
+            </div>
 
-<div class="sidebar">
-  <div class="icon active" onclick="openTab('aim',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle></svg>
-  </div>
-  <div class="icon" onclick="openTab('arma',this)">
-    <svg viewBox="0 0 24 24"><path d="M3 12h18M9 8v8"></path></svg>
-  </div>
-  <div class="icon" onclick="openTab('div',this)">
-    <svg viewBox="0 0 24 24">
-      <rect x="4" y="4" width="6" height="6"></rect>
-      <rect x="14" y="4" width="6" height="6"></rect>
-      <rect x="4" y="14" width="6" height="6"></rect>
-      <rect x="14" y="14" width="6" height="6"></rect>
-    </svg>
-  </div>
-  <div class="icon" onclick="openTab('seg',this)">
-    <svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-8 8-8 8s-8-3-8-8V7z"></path></svg>
-  </div>
-  <div class="icon" onclick="openTab('inj',this)">
-    <svg viewBox="0 0 24 24"><path d="M4 20l16-16M14 4l6 6"></path></svg>
-  </div>
-  <div class="icon" onclick="openTab('info',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
-  </div>
-</div>
+            <div class="categories-grid">
+                <button class="cat-btn active" onclick="showCat('cat1', this)">BYPASS IOS</button>
+                <button class="cat-btn" onclick="showCat('cat2', this)">PAINEL ANDROID</button>
+                <button class="cat-btn" onclick="showCat('cat3', this)">PAINEL IOS</button>
+                <button class="cat-btn" onclick="showCat('cat4', this)">HS PESCOÇO ANDROID</button>
+                <button class="cat-btn" onclick="showCat('cat5', this)">HS PESCOÇO IOS</button>
+            </div>
 
-<div class="main">
+            <div id="cat1" class="products-grid active">
+                <div class="card"><h3>BYPASS iOS 30 DIAS</h3><div class="price">R$ 400,00</div><button class="buy-btn" onclick="openCheckout('BYPASS iOS 30 DIAS', '400,00')">Adquirir</button></div>
+                <div class="card"><h3>BYPASS iOS PERMANENTE</h3><div class="price">R$ 750,00</div><button class="buy-btn" onclick="openCheckout('BYPASS iOS PERMANENTE', '750,00')">Adquirir</button></div>
+            </div>
 
-<div id="aim" class="tab active">
-  <div class="header">AIMBOT</div>
-  <div class="item"><span>Aimbot 89%</span><div class="toggle"></div></div>
-  <div class="item"><span>Aumentar Precisão</span><div class="toggle"></div></div>
-  <div style="display:flex;gap:6px;align-items:center">
-    <span>PRECISÃO</span>
-    <input type="range" min="0" max="10" value="0" step="1" class="range" oninput="fov.innerText=this.value">
-    <span class="value" id="fov">0</span>
-  </div>
-</div>
+            <div id="cat2" class="products-grid">
+                <div class="card"><h3>PAINEL ANDROID 15 DIAS</h3><div class="price">R$ 20,00</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID DIARIO', '20,00')">Adquirir</button></div>
+                <div class="card"><h3>PAINEL ANDROID 15 DIAS</h3><div class="price">R$ 45,00</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 15 DIAS', '45,00')">Adquirir</button></div>
+                <div class="card"><h3>PAINEL ANDROID 30 DIAS</h3><div class="price">R$ 75,00</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 30 DIAS', '75,00')">Adquirir</button></div>
+            </div>
 
-<div id="arma" class="tab">
-  <div class="header">ARMA</div>
-  <div class="item"><span>Sem Recuo</span><div class="toggle"></div></div>
-  <div class="item"><span>Precisão Avançada</span><div class="toggle"></div></div>
-</div>
+            <div id="cat3" class="products-grid">
+                <div class="card"><h3>PAINEL iOS 1 DIA</h3><div class="price">R$ 20,00</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 1 DIA', '20,00')">Adquirir</button></div>
+                <div class="card"><h3>PAINEL iOS 7 DIAS</h3><div class="price">R$ 40,00</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 7 DIAS', '40,00')">Adquirir</button></div>
+                <div class="card"><h3>PAINEL iOS 30 DIAS</h3><div class="price">R$ 80,00</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 30 DIAS', '80,00')">Adquirir</button></div>
+            </div>
 
-<div id="div" class="tab">
-  <div class="header">DIVERSOS</div>
-  <div class="item"><span>ativar 120 FPS</span><div class="toggle"></div></div>
-  <div class="item"><span>ativar OTIMIZAÇÃO</span><div class="toggle"></div></div>
-  
-  <div class="header" style="margin-top:20px">INSTALAR APP</div>
-  <button class="btn" id="installBtn" onclick="instalarPWA()" style="display:none">
-    📱 INSTALAR APLICATIVO
-  </button>
-  <div style="font-size:12px;color:#999;text-align:center" id="pwaMsg">App já instalado ou não disponível</div>
-</div>
+            <div id="cat4" class="products-grid">
+                <div class="card"><h3>HS PESCOÇO AND 7 DIAS</h3><div class="price">R$ 15,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO AND 7 DIAS', '15,00')">Adquirir</button></div>
+                <div class="card"><h3>HS PESCOÇO AND 30 DIAS</h3><div class="price">R$ 40,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO AND 30 DIAS', '40,00')">Adquirir</button></div>
+            </div>
 
-<div id="seg" class="tab">
-  <div class="header">SEGURANÇA</div>
-  <div style="display:flex;gap:6px;align-items:center">
-    <span>Nível</span>
-    <input type="range" min="0" max="100" value="0" class="range" oninput="sec.innerText=this.value">
-    <span class="value" id="sec">0</span>
-  </div>
-</div>
+            <div id="cat5" class="products-grid">
+                <div class="card"><h3>HS PESCOÇO iOS 30 DIAS</h3><div class="price">R$ 40,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO iOS 30 DIAS', '40,00')">Adquirir</button></div>
+                <div class="card"><h3>HS PESCOÇO iOS PERMANENTE</h3><div class="price">R$ 90,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO iOS PERMANENTE', '90,00')">Adquirir</button></div>
+            </div>
+        </div>
 
-<div id="inj" class="tab">
-  <div class="header">INJEÇÃO</div>
+        <div id="page-modding">
+            <button class="back-btn" onclick="togglePage('home')">← Voltar para a Loja</button>
+            <h1 style="color:var(--primary); font-size: 3rem; margin: 0;">CURSO MODDING ANDROID</h1>
+            <div class="modding-content">
+                <div>
+                    <h2 style="color:white; border-bottom: 2px solid var(--primary); display: inline-block;">O que você vai aprender?</h2>
+                    <ul style="list-style: none; padding: 0; margin-top: 20px;">
+                        <li>✅ Estrutura de Injeção Profissional</li>
+                        <li>✅ Bypass Anti-Cheat</li>
+                        <li>✅ Interface ImGui Personalizada</li>
+                        <li>✅ Lógica de Aimbot & ESP</li>
+                        <li>✅ Suporte Vitalício</li>
+                    </ul>
+                </div>
+                <div style="text-align: center; background: #111; padding: 30px; border: 1px dashed var(--primary);">
+                    <p style="font-size: 1rem; opacity: 0.7;">Investimento único</p>
+                    <div style="font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0;">R$ 150,00</div>
+                    <button class="buy-btn" style="padding: 20px;" onclick="openCheckout('CURSO MODDING ANDROID', '150,00')">ADQUIRIR AGORA</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <button class="btn" onclick="abrirFF('com.dts.freefireth')">ABRIR FREE FIRE</button>
-  <button class="btn" onclick="abrirFF('com.dts.freefiremax')">ABRIR FREE FIRE MAX</button>
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="checkout-box">
+            <div style="background: #ffaa0022; color: #ffaa00; padding: 5px 10px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; display: inline-block; margin-bottom: 10px;">PAGAMENTO SEMIAUTOMÁTICO</div>
+            <div id="prodName" style="color: var(--primary); font-weight: 900; font-size: 1.4rem; text-transform: uppercase;">PRODUTO</div>
+            
+            <div id="prodPrice" style="font-size: 2.5rem; font-weight: 900; margin: 10px 0;">R$ 0,00</div>
 
-  <div class="status" id="status" style="display:none">
-    <div class="dot"></div>
-    <span id="statusText">Injeção em andamento…</span>
-  </div>
+            <div class="pix-container">
+                <small style="color:#888;">CHAVE PIX (ALEATORIA)</small>
+                <small style="color:#888;">NOME; KENIA CARLADA SILVA</small>
+                <div class="pix-key" id="pixKey">826f68ba-d43e-44cf-b99e-d099ed91b70c</div>
+                <button onclick="copyPix()" style="background: var(--primary); border:none; color:white; padding:5px 10px; font-size:0.7rem; cursor:pointer; font-weight: 900;">COPIAR CHAVE</button>
+            </div>
 
-  <div class="log" id="log"></div>
-</div>
+            <div style="background: #1a1a1a; padding: 15px; font-size: 0.75rem; border-left: 4px solid var(--primary); text-align: left; margin-bottom: 15px;">
+                <strong>Passo a passo:</strong><br>
+                1. Pague o valor exato via PIX.<br>
+                2. Tire print do comprovante.<br>
+                3. Envie o print no Discord para receber seu acesso.
+            </div>
 
-<div id="info" class="tab">
-  <div class="header">INFORMAÇÕES</div>
-  
-  <div style="text-align:center;padding:20px">
-    <div style="font-size:24px;margin-bottom:15px">👨‍💻</div>
-    <div style="font-size:16px;font-weight:700;color:#ff0000;margin-bottom:10px">CRIADOR</div>
-    <div style="font-size:14px;color:#fff;margin-bottom:20px">Rian/monite</div>
-    <button class="btn btn-info" onclick="window.open('https://discord.gg/6jUdx6marp', '_blank')">🔗 DISCORD OFICIAL</button>
-  </div>
+            <label class="terms-area">
+                <input type="checkbox" id="termsCheck" onchange="toggleBuyButton()">
+                <span>Aceito que este é um produto digital, não reembolsável após o envio, e que a entrega depende da validação do comprovante.</span>
+            </label>
 
-  <div class="header" style="margin-top:20px">COR DO TEMA</div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px">
-    <div onclick="trocarCor('#ff0000')" style="width:50px;height:50px;background:#ff0000;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
-    <div onclick="trocarCor('#00ff00')" style="width:50px;height:50px;background:#00ff00;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
-    <div onclick="trocarCor('#0099ff')" style="width:50px;height:50px;background:#0099ff;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
-    <div onclick="trocarCor('#ff00ff')" style="width:50px;height:50px;background:#ff00ff;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
-    <div onclick="trocarCor('#ffaa00')" style="width:50px;height:50px;background:#ffaa00;border-radius:50%;cursor:pointer;border:3px solid #333;transition:.3s"></div>
-  </div>
-</div>
+            <button id="finalBuyBtn" class="buy-btn" disabled onclick="goToDiscord()">PAGOU? CLIQUE AQUI E SOLICITE SEU PRODUTO</button>
+            <button onclick="closeCheckout()" style="background:transparent; color:#555; border:none; margin-top:15px; cursor:pointer; font-weight: bold;">FECHAR</button>
+        </div>
+    </div>
 
-</div>
-</div>
-</div>
+    <script>
+        // Altere sua chave PIX aqui
+        const CHAVE_PIX = "826f68ba-d43e-44cf-b99e-d099ed91b70c";
 
-<!-- MATRIX ANIMATION -->
-<script>
-// Matrix para o fundo principal
-const canvas = document.getElementById('matrix');
-const ctx = canvas.getContext('2d');
+        function showCat(id, btn) {
+            document.querySelectorAll('.products-grid').forEach(g => g.classList.remove('active'));
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
 
-// Matrix para a tela de login
-const canvasLogin = document.getElementById('matrixLogin');
-const ctxLogin = canvasLogin.getContext('2d');
+        function togglePage(page) {
+            if(page === 'modding') {
+                document.getElementById('page-home').style.display = 'none';
+                document.getElementById('page-modding').style.display = 'block';
+            } else {
+                document.getElementById('page-home').style.display = 'block';
+                document.getElementById('page-modding').style.display = 'none';
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-let w, h, columns, drops;
-let wLogin, hLogin, columnsLogin, dropsLogin;
+        function openCheckout(name, price) {
+            document.getElementById('prodName').innerText = name;
+            document.getElementById('prodPrice').innerText = 'R$ ' + price;
+            document.getElementById('pixKey').innerText = CHAVE_PIX;
+            document.getElementById('checkoutModal').style.display = 'flex';
+            document.getElementById('termsCheck').checked = false;
+            document.getElementById('finalBuyBtn').disabled = true;
+        }
 
-function initMatrix() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-  
-  columns = Math.floor(w / 20);
-  drops = [];
-  
-  for(let i = 0; i < columns; i++) {
-    drops[i] = Math.random() * -100;
-  }
-}
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
 
-function initMatrixLogin() {
-  wLogin = canvasLogin.width = window.innerWidth;
-  hLogin = canvasLogin.height = window.innerHeight;
-  
-  columnsLogin = Math.floor(wLogin / 20);
-  dropsLogin = [];
-  
-  for(let i = 0; i < columnsLogin; i++) {
-    dropsLogin[i] = Math.random() * -100;
-  }
-}
+        function toggleBuyButton() {
+            document.getElementById('finalBuyBtn').disabled = !document.getElementById('termsCheck').checked;
+        }
 
-const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01';
-const charArray = chars.split('');
-let corMatrix = '#ff0000';
+        function copyPix() {
+            navigator.clipboard.writeText(CHAVE_PIX);
+            alert("Chave PIX copiada com sucesso!");
+        }
 
-function drawMatrix() {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-  ctx.fillRect(0, 0, w, h);
-  
-  ctx.fillStyle = corMatrix;
-  ctx.font = '15px monospace';
-  
-  for(let i = 0; i < drops.length; i++) {
-    const char = charArray[Math.floor(Math.random() * charArray.length)];
-    ctx.fillText(char, i * 20, drops[i] * 20);
-    
-    if(drops[i] * 20 > h && Math.random() > 0.975) {
-      drops[i] = 0;
-    }
-    drops[i]++;
-  }
-}
-
-function drawMatrixLogin() {
-  ctxLogin.fillStyle = 'rgba(0, 0, 0, 0.05)';
-  ctxLogin.fillRect(0, 0, wLogin, hLogin);
-  
-  ctxLogin.fillStyle = corMatrix;
-  ctxLogin.font = '15px monospace';
-  
-  for(let i = 0; i < dropsLogin.length; i++) {
-    const char = charArray[Math.floor(Math.random() * charArray.length)];
-    ctxLogin.fillText(char, i * 20, dropsLogin[i] * 20);
-    
-    if(dropsLogin[i] * 20 > hLogin && Math.random() > 0.975) {
-      dropsLogin[i] = 0;
-    }
-    dropsLogin[i]++;
-  }
-}
-
-initMatrix();
-initMatrixLogin();
-window.addEventListener('resize', () => {
-  initMatrix();
-  initMatrixLogin();
-});
-setInterval(drawMatrix, 35);
-setInterval(drawMatrixLogin, 35);
-</script>
-
-<!-- PWA INSTALL -->
-<script>
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBtn').style.display = 'block';
-  document.getElementById('pwaMsg').style.display = 'none';
-});
-
-function instalarPWA() {
-  if (!deferredPrompt) {
-    alert('App já está instalado ou não pode ser instalado neste dispositivo');
-    return;
-  }
-  
-  deferredPrompt.prompt();
-  
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('PWA instalado');
-      document.getElementById('installBtn').style.display = 'none';
-      document.getElementById('pwaMsg').style.display = 'block';
-      document.getElementById('pwaMsg').innerText = '✅ App instalado com sucesso!';
-    }
-    deferredPrompt = null;
-  });
-}
-
-// Registrar Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZnVuY3Rpb24oZXZlbnQpIHsKICBzZWxmLnNraXBXYWl0aW5nKCk7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdhY3RpdmF0ZScsIGZ1bmN0aW9uKGV2ZW50KSB7CiAgcmV0dXJuIHNlbGYuY2xpZW50cy5jbGFpbSgpOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCBmdW5jdGlvbihldmVudCkgewogIGV2ZW50LnJlc3BvbmRXaXRoKGZldGNoKGV2ZW50LnJlcXVlc3QpKTsKfSk7')
-    .catch(() => {});
-}
-</script>
-
-<!-- KEY SYSTEM -->
-<script>
-function ativarKey() {
-  const key = document.getElementById('keyInput').value.trim();
-  const keyMsg = document.getElementById('keyMsg');
-  
-  if(key === 'MONITECHEATSNOTOPO') {
-    document.getElementById('keyLock').style.display = 'none';
-    keyMsg.innerText = '';
-  } else {
-    keyMsg.innerText = '❌ Key inválida';
-  }
-}
-
-// Permitir Enter para logar
-document.getElementById('keyInput').addEventListener('keypress', function(e) {
-  if(e.key === 'Enter') {
-    ativarKey();
-  }
-});
-</script>
-
-<script>
-function openTab(id,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.icon').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-}
-document.querySelectorAll('.toggle').forEach(t=>t.onclick=()=>t.classList.toggle('on'));
-
-function timeNow(){
-  return new Date().toLocaleTimeString('pt-BR',{hour12:false});
-}
-
-function trocarCor(cor){
-  corMatrix = cor;
-  
-  // Se for branco, usar preto para texto
-  const corTexto = (cor === '#ffffff') ? '#000000' : cor;
-  
-  // Trocar cor do frame
-  document.querySelector('.frame').style.background = cor;
-  document.querySelector('.frame').style.boxShadow = `0 0 55px ${cor}`;
-  
-  // Trocar cor dos headers
-  document.querySelectorAll('.header').forEach(h => {
-    h.style.color = corTexto;
-    h.style.textShadow = `0 0 10px ${cor}`;
-  });
-  
-  // Trocar cor dos toggles ativos
-  document.querySelectorAll('.toggle.on').forEach(t => {
-    t.style.background = cor;
-    t.style.boxShadow = `0 0 10px ${cor}`;
-  });
-  
-  // Trocar cor dos botões
-  document.querySelectorAll('.btn:not(.btn-info)').forEach(b => {
-    if(!b.disabled){
-      b.style.background = cor;
-      b.style.boxShadow = `0 0 18px ${cor}`;
-      b.style.color = (cor === '#ffffff' || cor === '#00ff00' || cor === '#ffaa00') ? '#000' : '#fff';
-    }
-  });
-  
-  // Trocar cor dos valores (precisão e nível)
-  document.querySelectorAll('.value').forEach(v => {
-    v.style.color = corTexto;
-    v.style.textShadow = `0 0 8px ${cor}`;
-  });
-  
-  // Trocar cor dos ícones ativos na sidebar
-  document.querySelectorAll('.icon.active').forEach(i => {
-    i.style.boxShadow = `0 0 18px ${cor}`;
-  });
-  
-  document.querySelectorAll('.icon.active svg').forEach(s => {
-    s.style.stroke = corTexto;
-  });
-  
-  // Trocar cor do slider (range)
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .range::-webkit-slider-thumb {
-      background: ${cor} !important;
-      box-shadow: 0 0 12px ${cor} !important;
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-function abrirFF(packageName){
-  const log=document.getElementById('log');
-  const status=document.getElementById('status');
-  const text=document.getElementById('statusText');
-
-  status.style.display="flex";
-  text.innerText="Abrindo jogo...";
-
-  const tipo = packageName.includes('max') ? 'Free Fire MAX' : 'Free Fire';
-  const scheme = packageName.includes('max') ? 'freefiremax' : 'freefire';
-
-  log.innerHTML=
-    `[${timeNow()}] (SISTEMA) Iniciando processo...<br>`+
-    `[${timeNow()}] (INFO) ${tipo} selecionado<br>`+
-    `[${timeNow()}] (OK) Abrindo ${tipo}...<br>`;
-
-  // Detectar se é iPhone/iOS
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  
-  setTimeout(() => {
-    if (isIOS) {
-      // Abrir no iPhone direto sem App Store
-      const url = packageName.includes('max') 
-        ? 'freefire-max://' 
-        : 'freefire://';
-      window.location.href = url;
-    } else {
-      // Abrir no Android direto
-      window.location.href = `intent://#Intent;scheme=${scheme};package=${packageName};end`;
-    }
-  }, 500);
-}
-</script>
-
+        function goToDiscord() {
+            window.open("https://discord.gg/6jUdx6marp", "_blank");
+        }
+    </script>
 </body>
 </html>
