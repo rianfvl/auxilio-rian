@@ -15,9 +15,10 @@
             --grid-color: rgba(255, 69, 0, 0.08);
             --discord: #5865F2;
             --pix: #32BCAD;
+            --warning: #ffcc00;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 
         body {
             margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg);
@@ -25,158 +26,103 @@
             background-size: 50px 50px; color: var(--text); line-height: 1.6; overflow-x: hidden;
         }
 
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-            text-align: center; 
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; text-align: center; }
 
-        /* Floating Discord */
         .floating-discord {
             position: fixed; right: 20px; bottom: 20px; background: var(--discord);
             width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 20px rgba(88, 101, 242, 0.5); z-index: 9999; transition: 0.3s; cursor: pointer;
         }
-        .floating-discord:hover { transform: scale(1.1); }
         .floating-discord svg { width: 30px; fill: white; }
 
         .shop-header { 
-            font-size: clamp(2.5rem, 10vw, 5rem); 
-            font-weight: 900; color: var(--primary); 
+            font-size: clamp(2.5rem, 10vw, 5rem); font-weight: 900; color: var(--primary); 
             text-transform: uppercase; letter-spacing: clamp(2px, 2vw, 10px); 
-            text-shadow: 0 0 15px var(--primary-glow);
-            margin-bottom: 20px;
+            text-shadow: 0 0 15px var(--primary-glow); margin-bottom: 10px;
         }
 
-        /* Stats Bar Responsiva */
         .stats-bar {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px; margin: 40px 0; padding: 20px; 
-            background: rgba(255,255,255,0.03); border: 1px solid #1a1a1a;
-            border-radius: 8px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px; margin: 40px 0; padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a1a; border-radius: 8px;
         }
-        .stat-item h4 { margin: 0; font-size: 1.8rem; color: var(--primary); }
-        .stat-item p { margin: 0; font-size: 0.75rem; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+        .stat-item h4 { margin: 0; font-size: 1.6rem; color: var(--primary); }
+        .stat-item p { margin: 0; font-size: 0.7rem; text-transform: uppercase; opacity: 0.6; }
 
-        /* Mod Promo Section - Ajustada para Desktop/Mobile */
+        /* Mod Promo Section */
         .mod-promo {
             background: linear-gradient(90deg, #111, #1a0800);
             border: 1px solid var(--primary); padding: 30px; margin-bottom: 40px;
             display: flex; align-items: center; justify-content: space-between; border-radius: 8px;
             text-align: left; flex-wrap: wrap; gap: 20px;
         }
-        .mod-promo-text { flex: 1; min-width: 280px; }
 
-        .categories-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 10px; margin-bottom: 30px; 
-        }
-        
-        .cat-btn { 
-            background: #111; border: 1px solid #222; padding: 15px; 
-            color: #777; cursor: pointer; font-weight: 900; 
-            text-transform: uppercase; font-size: 0.75rem; transition: 0.2s; 
-            border-radius: 4px;
-        }
-        .cat-btn:hover { background: #161616; border-color: #444; }
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 30px; }
+        .cat-btn { background: #111; border: 1px solid #222; padding: 15px; color: #777; cursor: pointer; font-weight: 900; text-transform: uppercase; font-size: 0.7rem; transition: 0.2s; border-radius: 4px; }
         .cat-btn.active { border-color: var(--primary); color: var(--primary); box-shadow: inset 0 0 10px var(--primary-glow); }
 
-        /* Grid de Produtos - Ajustado para 3 colunas no PC */
-        .products-grid { 
-            display: none; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 25px; 
-            animation: fadeInUp 0.4s ease-out; 
-        }
+        .products-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; animation: fadeInUp 0.4s; }
         .products-grid.active { display: grid; }
         
-        .card { 
-            background: var(--card-bg); border: 1px solid #1a1a1a; 
-            padding: 30px; text-align: left; transition: 0.3s; 
-            border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .card:hover { border-color: var(--primary); transform: translateY(-8px); background: #0a0a0a; }
-        .card h3 { margin-top: 0; min-height: 50px; font-size: 1.2rem; }
-        .card .price { font-size: 2.2rem; font-weight: 900; margin: 20px 0; color: #fff; }
+        .card { background: var(--card-bg); border: 1px solid #1a1a1a; padding: 25px; text-align: left; transition: 0.3s; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .card h3 { font-size: 1.1rem; margin: 0; min-height: 45px; }
+        .card .price { font-size: 2rem; font-weight: 900; margin: 15px 0; color: #fff; }
 
         .buy-btn { 
             display: block; text-decoration: none; text-align: center;
-            background: var(--primary); color: white; border: none; width: 100%; padding: 15px; 
+            background: var(--primary); color: white; border: none; width: 100%; padding: 14px; 
             font-weight: 900; cursor: pointer; text-transform: uppercase; 
-            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
-            transition: 0.3s;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%); transition: 0.3s;
         }
-        .buy-btn:hover:not(:disabled) { filter: brightness(1.2); transform: scale(1.02); }
         .buy-btn:disabled { background: #333; cursor: not-allowed; opacity: 0.5; clip-path: none; }
 
-        /* Modal / Checkout Responsivo */
-        .modal-overlay { 
-            display: none; position: fixed; inset: 0; 
-            background: rgba(0,0,0,0.95); z-index: 10000; 
-            align-items: center; justify-content: center; backdrop-filter: blur(10px);
-            padding: 20px;
-        }
-        .checkout-box { 
-            background: #0d0d0d; border: 1px solid var(--primary); 
-            width: 100%; max-width: 500px; padding: clamp(20px, 5vw, 40px); 
-            border-radius: 8px; position: relative; max-height: 90vh; overflow-y: auto;
-        }
-
-        /* Page Modding Estilizada */
+        /* Page Modding */
         #page-modding { display: none; text-align: left; animation: fadeInUp 0.4s; }
-        .modding-content { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-            gap: 40px; margin-top: 40px; background: #0a0a0a; 
-            padding: clamp(20px, 5vw, 50px); border: 1px solid #1a1a1a; border-radius: 8px;
-        }
-        .back-btn { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 12px 25px; cursor: pointer; margin-bottom: 20px; font-weight: 900; text-transform: uppercase; border-radius: 4px; transition: 0.3s; }
-        .back-btn:hover { background: var(--primary); color: white; }
+        .modding-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 40px; background: #0a0a0a; padding: 40px; border: 1px solid #1a1a1a; border-radius: 8px; }
+        .back-btn { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 10px 20px; cursor: pointer; margin-bottom: 20px; font-weight: 900; text-transform: uppercase; border-radius: 4px; }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* Modal / Checkout */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(15px); padding: 20px; }
+        .checkout-box { background: #0d0d0d; border: 1px solid var(--primary); width: 100%; max-width: 500px; padding: 30px; border-radius: 8px; position: relative; max-height: 90vh; overflow-y: auto; }
 
-        /* Media Query para Celular Deitado / Tablets pequenos */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .shop-header { font-size: 2.5rem; }
-            .modal-overlay { align-items: flex-start; }
-            .checkout-box { margin-top: 20px; }
-        }
+        .legal-notice h2 { color: var(--warning); margin-top: 0; font-size: 1.4rem; }
+        .legal-box { background: rgba(255, 204, 0, 0.05); border-left: 5px solid var(--warning); padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 0.85rem; color: #ddd; }
+        
+        #pixSection { display: none; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-    <a href="https://discord.gg/6jUdx6marp" class="floating-discord" target="_blank" title="Suporte Discord">
+    <a href="https://discord.gg/6jUdx6marp" class="floating-discord" target="_blank">
         <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.06,72.06,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.39,80.21a105.73,105.73,0,0,0,32.17,16.15,77.7,77.7,0,0,0,6.89-11.11,68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.72-27.49-4.59-51.05-19.54-72.14ZM42.45,65.69C36.18,65.69,31,60,31,53s5.07-12.59,11.44-12.59S54,46.13,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5.07-12.59,11.44-12.59S96.23,46.13,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
     </a>
 
     <div class="container">
         <div id="page-home">
-            <header>
-                <div class="shop-header">RODRIGUES SHOP</div>
-            </header>
+            <div class="shop-header">RODRIGUES SHOP</div>
             
             <div class="stats-bar">
-                <div class="stat-item"><h4>+1.000</h4><p>Vendas Concluídas</p></div>
-                <div class="stat-item"><h4>+1.000</h4><p>Membros Ativos</p></div>
-                <div class="stat-item"><h4>100%</h4><p>Antiban Security</p></div>
+                <div class="stat-item"><h4>+1.000</h4><p>Vendas</p></div>
+                <div class="stat-item"><h4>100%</h4><p>Seguro</p></div>
+                <div class="stat-item"><h4>SUPORTE</h4><p>Discord</p></div>
                 <div class="stat-item"><h4 style="color:#00ff00">ONLINE</h4><p>Status</p></div>
             </div>
 
-            <section class="mod-promo">
-                <div class="mod-promo-text">
-                    <h3 style="margin:0; color:var(--primary); font-size: 1.5rem;">CRIE SEU PRÓPRIO MOD</h3>
-                    <p style="margin:5px 0 0; opacity:0.7;">Transforme suas ideias em softwares reais e funcionais com nosso curso.</p>
+            <div class="mod-promo">
+                <div>
+                    <h3 style="margin:0; color:var(--primary); font-size: 1.4rem;">CRIE SEU PRÓPRIO MOD</h3>
+                    <p style="margin:5px 0 0; opacity:0.7; font-size: 0.9rem;">Curso completo: Injeção, Bypass, ImGui e Aimbot.</p>
                 </div>
-                <button class="buy-btn" style="width:auto; padding: 15px 50px;" onclick="togglePage('modding')">SAIBA MAIS</button>
-            </section>
+                <button class="buy-btn" style="width:auto; padding: 12px 40px;" onclick="togglePage('modding')">VER CURSO</button>
+            </div>
 
             <nav class="categories-grid">
                 <button class="cat-btn active" onclick="showCat('cat1', this)">BYPASS IOS</button>
                 <button class="cat-btn" onclick="showCat('cat2', this)">PAINEL ANDROID</button>
                 <button class="cat-btn" onclick="showCat('cat3', this)">PAINEL IOS</button>
-                <button class="cat-btn" onclick="showCat('cat4', this)">HS PESCOÇO ANDROID</button>
+                <button class="cat-btn" onclick="showCat('cat4', this)">HS PESCOÇO AND</button>
                 <button class="cat-btn" onclick="showCat('cat5', this)">HS PESCOÇO IOS</button>
             </nav>
 
@@ -210,22 +156,22 @@
 
         <div id="page-modding">
             <button class="back-btn" onclick="togglePage('home')">← Voltar para a Loja</button>
-            <h1 style="color:var(--primary); font-size: clamp(2rem, 5vw, 3.5rem); margin: 0;">CURSO MODDING ANDROID</h1>
+            <h1 style="color:var(--primary); font-size: 2.5rem; margin: 0;">CURSO MODDING ANDROID</h1>
             <div class="modding-content">
                 <div>
-                    <h2 style="color:white; border-bottom: 2px solid var(--primary); display: inline-block;">O que você vai aprender?</h2>
-                    <ul style="list-style: none; padding: 0; margin-top: 20px; text-align: left;">
-                        <li style="margin-bottom: 10px;">✅ Estrutura de Injeção Profissional</li>
-                        <li style="margin-bottom: 10px;">✅ Bypass Anti-Cheat</li>
-                        <li style="margin-bottom: 10px;">✅ Interface ImGui Personalizada</li>
-                        <li style="margin-bottom: 10px;">✅ Lógica de Aimbot & ESP</li>
-                        <li style="margin-bottom: 10px;">✅ Suporte Vitalício</li>
+                    <h2 style="color:white; border-bottom: 2px solid var(--primary); display: inline-block;">Conteúdo do Curso</h2>
+                    <ul style="list-style: none; padding: 0; margin-top: 20px;">
+                        <li style="margin-bottom: 10px;">🚀 <b>Módulo 1:</b> Estrutura de Injeção e Libs</li>
+                        <li style="margin-bottom: 10px;">🛡️ <b>Módulo 2:</b> Bypass Anti-Cheat Avançado</li>
+                        <li style="margin-bottom: 10px;">🎨 <b>Módulo 3:</b> Interface ImGui Dark Style</li>
+                        <li style="margin-bottom: 10px;">🎯 <b>Módulo 4:</b> Lógica de Aimbot, ESP e Recoil</li>
+                        <li style="margin-bottom: 10px;">💎 <b>Bônus:</b> Suporte Vitalício no Grupo VIP</li>
                     </ul>
                 </div>
-                <div style="text-align: center; background: #111; padding: 40px; border: 1px dashed var(--primary); border-radius: 8px;">
-                    <p style="font-size: 1rem; opacity: 0.7;">Investimento único</p>
-                    <div style="font-size: 4rem; font-weight: 900; color: white; margin: 10px 0;">R$ 150,00</div>
-                    <button class="buy-btn" style="padding: 20px;" onclick="openCheckout('CURSO MODDING ANDROID', '150,00')">ADQUIRIR AGORA</button>
+                <div style="text-align: center; background: #111; padding: 30px; border: 1px dashed var(--primary); border-radius: 8px;">
+                    <p style="font-size: 1rem; opacity: 0.7;">Preço Promocional</p>
+                    <div style="font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0;">R$ 150,00</div>
+                    <button class="buy-btn" style="padding: 20px;" onclick="openCheckout('CURSO MODDING ANDROID', '150,00')">ADQUIRIR CURSO</button>
                 </div>
             </div>
         </div>
@@ -233,34 +179,45 @@
 
     <div class="modal-overlay" id="checkoutModal">
         <div class="checkout-box">
-            <div style="background: #ffaa0022; color: #ffaa00; padding: 5px 12px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; display: inline-block; margin-bottom: 15px;">PAGAMENTO SEMIAUTOMÁTICO</div>
-            <div id="prodName" style="color: var(--primary); font-weight: 900; font-size: 1.6rem; text-transform: uppercase;">PRODUTO</div>
-            <div id="prodPrice" style="font-size: 3rem; font-weight: 900; margin: 15px 0;">R$ 0,00</div>
-
-            <div class="pix-container">
-                <small style="color:#888; display: block; margin-bottom: 5px;">CHAVE PIX (COPIE E COLE)</small>
-                <div class="pix-key" id="pixKey" style="background: #000; padding: 10px; border-radius: 4px; margin-bottom: 10px;">826f68ba-d43e-44cf-b99e-d099ed91b70c</div>
-                <button onclick="copyPix()" style="background: var(--primary); border:none; color:white; padding:10px 20px; font-size:0.8rem; cursor:pointer; font-weight: 900; width: 100%; border-radius: 4px;">COPIAR CHAVE</button>
+            <div id="legalSection">
+                <h2>⚠️ TERMOS JURÍDICOS</h2>
+                <p>Item: <strong id="legalProdName" style="color:var(--primary)">...</strong></p>
+                <div class="legal-box">
+                    • Pagamento via PIX deve ser no valor EXATO de <strong id="legalProdPrice">...</strong>.<br>
+                    • Estornos falsos ou má fé resultam em bloqueio de HWID e medidas judiciais (Estelionato Art. 171).<br>
+                    • Ao prosseguir, você aceita que este produto é virtual e não reembolsável.
+                </div>
+                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin: 20px 0; font-size: 0.85rem; text-align: left;">
+                    <input type="checkbox" id="legalCheck" onchange="validateLegal()">
+                    <span>Li e aceito os termos. Entendo que o envio do valor incorreto causará a perda do dinheiro sem estorno.</span>
+                </label>
+                <button id="proceedToPayBtn" class="buy-btn" disabled onclick="showPix()">CONCORDAR E PAGAR</button>
+                <button onclick="closeCheckout()" style="background:transparent; color:#555; border:none; margin-top:15px; cursor:pointer; font-weight: bold; width:100%">CANCELAR</button>
             </div>
 
-            <div style="background: #1a1a1a; padding: 15px; font-size: 0.85rem; border-left: 4px solid var(--primary); text-align: left; margin: 20px 0; border-radius: 0 4px 4px 0;">
-                <strong>Como receber:</strong><br>
-                1. Pague o valor via PIX.<br>
-                2. Tire print do comprovante.<br>
-                3. Envie no Discord para liberar o download.
+            <div id="pixSection">
+                <div id="prodName" style="color: var(--primary); font-weight: 900; font-size: 1.4rem; text-transform: uppercase;">...</div>
+                <div id="prodPrice" style="font-size: 2.8rem; font-weight: 900; margin: 15px 0;">...</div>
+                <div style="background: #111; padding: 15px; border-radius: 8px; border: 1px solid #222;">
+                    <small style="color:#888;">CHAVE PIX (CLIQUE PARA COPIAR)</small>
+                    <div id="pixKey" style="word-break: break-all; font-family: monospace; color: var(--pix); margin: 10px 0; font-size: 0.9rem;">826f68ba-d43e-44cf-b99e-d099ed91b70c</div>
+                    <button onclick="copyPix()" style="background: var(--primary); border:none; color:white; padding:12px; font-weight: 900; width: 100%; cursor:pointer;">COPIAR CHAVE</button>
+                </div>
+                <button class="buy-btn" style="margin-top: 20px;" onclick="goToDiscord()">ENVIAR COMPROVANTE (DISCORD)</button>
+                <button onclick="closeCheckout()" style="background:transparent; color:#555; border:none; margin-top:15px; cursor:pointer; font-weight: bold; width:100%">VOLTAR</button>
             </div>
-
-            <label class="terms-area">
-                <input type="checkbox" id="termsCheck" onchange="toggleBuyButton()">
-                <span>Aceito que este é um produto digital e não reembolsável.</span>
-            </label>
-
-            <button id="finalBuyBtn" class="buy-btn" disabled onclick="goToDiscord()">JÁ PAGUEI, SOLICITAR PRODUTO</button>
-            <button onclick="closeCheckout()" style="background:transparent; color:#555; border:none; margin-top:20px; cursor:pointer; font-weight: bold; width: 100%;">FECHAR</button>
         </div>
     </div>
 
     <script>
+        // --- ANTI-CRACK SYSTEM ---
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false; // F12
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
+        };
+
         const CHAVE_PIX = "826f68ba-d43e-44cf-b99e-d099ed91b70c";
 
         function showCat(id, btn) {
@@ -282,25 +239,33 @@
         }
 
         function openCheckout(name, price) {
+            document.getElementById('legalSection').style.display = 'block';
+            document.getElementById('pixSection').style.display = 'none';
+            document.getElementById('legalCheck').checked = false;
+            document.getElementById('proceedToPayBtn').disabled = true;
+            document.getElementById('legalProdName').innerText = name;
+            document.getElementById('legalProdPrice').innerText = 'R$ ' + price;
             document.getElementById('prodName').innerText = name;
             document.getElementById('prodPrice').innerText = 'R$ ' + price;
-            document.getElementById('pixKey').innerText = CHAVE_PIX;
             document.getElementById('checkoutModal').style.display = 'flex';
-            document.getElementById('termsCheck').checked = false;
-            document.getElementById('finalBuyBtn').disabled = true;
+        }
+
+        function validateLegal() {
+            document.getElementById('proceedToPayBtn').disabled = !document.getElementById('legalCheck').checked;
+        }
+
+        function showPix() {
+            document.getElementById('legalSection').style.display = 'none';
+            document.getElementById('pixSection').style.display = 'block';
         }
 
         function closeCheckout() {
             document.getElementById('checkoutModal').style.display = 'none';
         }
 
-        function toggleBuyButton() {
-            document.getElementById('finalBuyBtn').disabled = !document.getElementById('termsCheck').checked;
-        }
-
         function copyPix() {
             navigator.clipboard.writeText(CHAVE_PIX);
-            alert("Chave PIX copiada! Agora basta colar no seu banco e pagar.");
+            alert("Chave PIX copiada!");
         }
 
         function goToDiscord() {
