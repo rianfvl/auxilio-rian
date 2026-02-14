@@ -5,25 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RODRIGUES SHOP | OFICIAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <style>
         :root {
-            --primary: #FF4500;
-            --primary-glow: rgba(255, 69, 0, 0.4);
-            --bg: #050505;
-            --card-bg: rgba(12, 12, 12, 0.98);
+            --primary: #1e1e2f; 
+            --accent: #6246ff;
+            --primary-glow: rgba(98, 70, 255, 0.3);
+            --bg: #0b0b14;
+            --card-bg: #161625;
             --text: #ffffff;
-            --grid-color: rgba(255, 69, 0, 0.08);
+            --grid-color: rgba(98, 70, 255, 0.05);
             --discord: #5865F2;
             --pix: #32BCAD;
             --warning: #ffcc00;
         }
 
-        * { box-sizing: border-box; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-
+        * { box-sizing: border-box; -webkit-user-select: none; user-select: none; }
+        
         body {
             margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg);
-            background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 50px 50px; color: var(--text); line-height: 1.6; overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1e1e2f 0%, transparent 50%),
+                linear-gradient(var(--grid-color) 1px, transparent 1px), 
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px; 
+            color: var(--text); line-height: 1.6; overflow-x: hidden;
+        }
+
+        /* TELA DE MANUTENÇÃO BLOQUEANTE */
+        #mt-screen {
+            display: none; position: fixed; inset: 0; background: #050505;
+            z-index: 999999; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center;
         }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; text-align: center; }
@@ -31,246 +48,242 @@
         .floating-discord {
             position: fixed; right: 20px; bottom: 20px; background: var(--discord);
             width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5); z-index: 9999; transition: 0.3s; cursor: pointer;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4); z-index: 9999; cursor: pointer;
+            transition: transform 0.3s;
         }
+        .floating-discord:hover { transform: scale(1.1); }
         .floating-discord svg { width: 30px; fill: white; }
 
         .shop-header { 
-            font-size: clamp(2.5rem, 10vw, 5rem); font-weight: 900; color: var(--primary); 
-            text-transform: uppercase; letter-spacing: clamp(2px, 2vw, 10px); 
-            text-shadow: 0 0 15px var(--primary-glow); margin-bottom: 10px;
+            font-size: clamp(2.5rem, 10vw, 5rem); font-weight: 900; 
+            color: #fff; text-transform: uppercase; letter-spacing: clamp(2px, 2vw, 10px); 
+            text-shadow: 0 0 20px var(--primary-glow); margin-bottom: 10px;
         }
 
         .stats-bar {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px; margin: 40px 0; padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a1a; border-radius: 8px;
+            gap: 20px; margin: 40px 0; padding: 25px; 
+            background: rgba(30, 30, 47, 0.4); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; backdrop-filter: blur(10px);
         }
-        .stat-item h4 { margin: 0; font-size: 1.6rem; color: var(--primary); }
+        .stat-item h4 { margin: 0; font-size: 1.6rem; color: var(--accent); }
         .stat-item p { margin: 0; font-size: 0.7rem; text-transform: uppercase; opacity: 0.6; }
 
-        /* Mod Promo Section */
         .mod-promo {
-            background: linear-gradient(90deg, #111, #1a0800);
-            border: 1px solid var(--primary); padding: 30px; margin-bottom: 40px;
-            display: flex; align-items: center; justify-content: space-between; border-radius: 8px;
-            text-align: left; flex-wrap: wrap; gap: 20px;
+            background: linear-gradient(90deg, #161625, #1e1e2f);
+            border: 1px solid var(--accent); padding: 30px; margin-bottom: 40px;
+            display: flex; align-items: center; justify-content: space-between; border-radius: 12px;
+            text-align: left; flex-wrap: wrap; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 30px; }
-        .cat-btn { background: #111; border: 1px solid #222; padding: 15px; color: #777; cursor: pointer; font-weight: 900; text-transform: uppercase; font-size: 0.7rem; transition: 0.2s; border-radius: 4px; }
-        .cat-btn.active { border-color: var(--primary); color: var(--primary); box-shadow: inset 0 0 10px var(--primary-glow); }
+        .cat-btn { 
+            background: #161625; border: 1px solid #2a2a40; padding: 15px; 
+            color: #888; cursor: pointer; font-weight: 900; text-transform: uppercase; 
+            font-size: 0.7rem; border-radius: 6px; transition: 0.3s;
+        }
+        .cat-btn.active { border-color: var(--accent); color: #fff; background: var(--accent); box-shadow: 0 0 15px var(--primary-glow); }
 
-        .products-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; animation: fadeInUp 0.4s; }
-        .products-grid.active { display: grid; }
+        .products-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .products-grid.active { display: grid; animation: fadeInUp 0.4s; }
         
-        .card { background: var(--card-bg); border: 1px solid #1a1a1a; padding: 25px; text-align: left; transition: 0.3s; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .card h3 { font-size: 1.1rem; margin: 0; min-height: 45px; }
-        .card .price { font-size: 2rem; font-weight: 900; margin: 15px 0; color: #fff; }
+        .card { 
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); 
+            padding: 30px; text-align: left; border-radius: 12px; 
+            display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s;
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-8px); }
+        .card h3 { font-size: 1.1rem; margin: 0; min-height: 45px; color: #ececef; }
+        .card .price { font-size: 2.2rem; font-weight: 900; margin: 20px 0; color: #fff; }
 
         .buy-btn { 
-            display: block; text-decoration: none; text-align: center;
-            background: var(--primary); color: white; border: none; width: 100%; padding: 14px; 
-            font-weight: 900; cursor: pointer; text-transform: uppercase; 
+            display: block; background: var(--accent); color: white; border: none; width: 100%; padding: 16px; 
+            font-weight: 900; cursor: pointer; text-transform: uppercase; border-radius: 6px;
             clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%); transition: 0.3s;
         }
+        .buy-btn:hover:not(:disabled) { filter: brightness(1.2); transform: scale(1.02); }
         .buy-btn:disabled { background: #333; cursor: not-allowed; opacity: 0.5; clip-path: none; }
 
-        /* Page Modding */
-        #page-modding { display: none; text-align: left; animation: fadeInUp 0.4s; }
-        .modding-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 40px; background: #0a0a0a; padding: 40px; border: 1px solid #1a1a1a; border-radius: 8px; }
-        .back-btn { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 10px 20px; cursor: pointer; margin-bottom: 20px; font-weight: 900; text-transform: uppercase; border-radius: 4px; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(5, 5, 10, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(10px); padding: 20px; }
+        .checkout-box { background: #161625; border: 1px solid var(--accent); width: 100%; max-width: 500px; padding: 35px; border-radius: 15px; position: relative; }
 
-        /* Modal / Checkout */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(15px); padding: 20px; }
-        .checkout-box { background: #0d0d0d; border: 1px solid var(--primary); width: 100%; max-width: 500px; padding: 30px; border-radius: 8px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .legal-box { background: rgba(255, 204, 0, 0.05); border-left: 4px solid var(--warning); padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 0.85rem; color: #ccc; text-align: left; }
+        .gamer-input { width: 100%; background: #0b0b14; border: 1px solid #2a2a40; padding: 14px; color: white; border-radius: 6px; margin: 10px 0; }
 
-        .legal-notice h2 { color: var(--warning); margin-top: 0; font-size: 1.4rem; }
-        .legal-box { background: rgba(255, 204, 0, 0.05); border-left: 5px solid var(--warning); padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 0.85rem; color: #ddd; }
+        .checkout-info { background: rgba(255,255,255,0.03); border: 1px solid #2a2a40; border-radius: 10px; padding: 20px; text-align: left; margin-bottom: 20px; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; }
+        .info-row b { color: var(--accent); }
+
+        #qrcode { background: white; padding: 15px; display: inline-block; border-radius: 10px; margin: 20px 0; }
         
-        #pixSection { display: none; }
-
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <a href="https://discord.gg/6jUdx6marp" class="floating-discord" target="_blank">
-        <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.06,72.06,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.39,80.21a105.73,105.73,0,0,0,32.17,16.15,77.7,77.7,0,0,0,6.89-11.11,68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.72-27.49-4.59-51.05-19.54-72.14ZM42.45,65.69C36.18,65.69,31,60,31,53s5.07-12.59,11.44-12.59S54,46.13,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5.07-12.59,11.44-12.59S96.23,46.13,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
-    </a>
+<div id="mt-screen">
+    <h1 style="color:var(--accent); font-size: 4rem; font-weight: 900; margin: 0;">MANUTENÇÃO</h1>
+    <p style="opacity: 0.5; font-weight: bold;">SITE EM ATUALIZAÇÃO REALIZE SEUS PEDIDOS NO DISCORD</p>
+</div>
 
-    <div class="container">
-        <div id="page-home">
-            <div class="shop-header">RODRIGUES SHOP</div>
-            
-            <div class="stats-bar">
-                <div class="stat-item"><h4>+1.000</h4><p>Vendas</p></div>
-                <div class="stat-item"><h4>100%</h4><p>Seguro</p></div>
-                <div class="stat-item"><h4>SUPORTE</h4><p>Discord</p></div>
-                <div class="stat-item"><h4 style="color:#00ff00">ONLINE</h4><p>Status</p></div>
-            </div>
+<a href="https://discord.gg/6jUdx6marp" class="floating-discord" target="_blank">
+    <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.06,72.06,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.39,80.21a105.73,105.73,0,0,0,32.17,16.15,77.7,77.7,0,0,0,6.89-11.11,68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.72-27.49-4.59-51.05-19.54-72.14ZM42.45,65.69C36.18,65.69,31,60,31,53s5.07-12.59,11.44-12.59S54,46.13,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5.07-12.59,11.44-12.59S96.23,46.13,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+</a>
 
-            <div class="mod-promo">
-                <div>
-                    <h3 style="margin:0; color:var(--primary); font-size: 1.4rem;">CRIE SEU PRÓPRIO MOD</h3>
-                    <p style="margin:5px 0 0; opacity:0.7; font-size: 0.9rem;">Curso completo: Injeção, Bypass, ImGui e Aimbot.</p>
-                </div>
-                <button class="buy-btn" style="width:auto; padding: 12px 40px;" onclick="togglePage('modding')">VER CURSO</button>
-            </div>
-
-            <nav class="categories-grid">
-                <button class="cat-btn active" onclick="showCat('cat1', this)">BYPASS IOS</button>
-                <button class="cat-btn" onclick="showCat('cat2', this)">PAINEL ANDROID</button>
-                <button class="cat-btn" onclick="showCat('cat3', this)">PAINEL IOS</button>
-                <button class="cat-btn" onclick="showCat('cat4', this)">HS PESCOÇO AND</button>
-                <button class="cat-btn" onclick="showCat('cat5', this)">HS PESCOÇO IOS</button>
-            </nav>
-
-            <div id="cat1" class="products-grid active">
-                <div class="card"><h3>BYPASS iOS 30 DIAS</h3><div class="price">R$ 400,00</div><button class="buy-btn" onclick="openCheckout('BYPASS iOS 30 DIAS', '400,00')">Adquirir</button></div>
-                <div class="card"><h3>BYPASS iOS PERMANENTE</h3><div class="price">R$ 750,00</div><button class="buy-btn" onclick="openCheckout('BYPASS iOS PERMANENTE', '750,00')">Adquirir</button></div>
-            </div>
-
-            <div id="cat2" class="products-grid">
-                <div class="card"><h3>PAINEL ANDROID DIÁRIO</h3><div class="price">R$ 20,00</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID DIARIO', '20,00')">Adquirir</button></div>
-                <div class="card"><h3>PAINEL ANDROID 15 DIAS</h3><div class="price">R$ 45,00</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 15 DIAS', '45,00')">Adquirir</button></div>
-                <div class="card"><h3>PAINEL ANDROID 30 DIAS</h3><div class="price">R$ 75,00</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 30 DIAS', '75,00')">Adquirir</button></div>
-            </div>
-
-            <div id="cat3" class="products-grid">
-                <div class="card"><h3>PAINEL iOS 1 DIA</h3><div class="price">R$ 20,00</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 1 DIA', '20,00')">Adquirir</button></div>
-                <div class="card"><h3>PAINEL iOS 7 DIAS</h3><div class="price">R$ 40,00</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 7 DIAS', '40,00')">Adquirir</button></div>
-                <div class="card"><h3>PAINEL iOS 30 DIAS</h3><div class="price">R$ 80,00</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 30 DIAS', '80,00')">Adquirir</button></div>
-            </div>
-
-            <div id="cat4" class="products-grid">
-                <div class="card"><h3>HS PESCOÇO AND 7 DIAS</h3><div class="price">R$ 15,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO AND 7 DIAS', '15,00')">Adquirir</button></div>
-                <div class="card"><h3>HS PESCOÇO AND 30 DIAS</h3><div class="price">R$ 40,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO AND 30 DIAS', '40,00')">Adquirir</button></div>
-            </div>
-
-            <div id="cat5" class="products-grid">
-                <div class="card"><h3>HS PESCOÇO iOS 30 DIAS</h3><div class="price">R$ 40,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO iOS 30 DIAS', '40,00')">Adquirir</button></div>
-                <div class="card"><h3>HS PESCOÇO iOS PERMANENTE</h3><div class="price">R$ 90,00</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO iOS PERMANENTE', '90,00')">Adquirir</button></div>
-            </div>
+<div class="container" id="main-site">
+    <div id="page-home">
+        <div class="shop-header">RODRIGUES SHOP</div>
+        <div class="stats-bar">
+            <div class="stat-item"><h4>+1.000</h4><p>Vendas</p></div>
+            <div class="stat-item"><h4>100%</h4><p>Seguro</p></div>
+            <div class="stat-item"><h4 style="color:#00ff00">ONLINE</h4><p>Status</p></div>
         </div>
 
-        <div id="page-modding">
-            <button class="back-btn" onclick="togglePage('home')">← Voltar para a Loja</button>
-            <h1 style="color:var(--primary); font-size: 2.5rem; margin: 0;">CURSO MODDING ANDROID</h1>
-            <div class="modding-content">
-                <div>
-                    <h2 style="color:white; border-bottom: 2px solid var(--primary); display: inline-block;">Conteúdo do Curso</h2>
-                    <ul style="list-style: none; padding: 0; margin-top: 20px;">
-                        <li style="margin-bottom: 10px;">🚀 <b>Módulo 1:</b> Estrutura de Injeção e Libs</li>
-                        <li style="margin-bottom: 10px;">🛡️ <b>Módulo 2:</b> Bypass Anti-Cheat Avançado</li>
-                        <li style="margin-bottom: 10px;">🎨 <b>Módulo 3:</b> Interface ImGui Dark Style</li>
-                        <li style="margin-bottom: 10px;">🎯 <b>Módulo 4:</b> Lógica de Aimbot, ESP e Recoil</li>
-                        <li style="margin-bottom: 10px;">💎 <b>Bônus:</b> Suporte Vitalício no Grupo VIP</li>
-                    </ul>
-                </div>
-                <div style="text-align: center; background: #111; padding: 30px; border: 1px dashed var(--primary); border-radius: 8px;">
-                    <p style="font-size: 1rem; opacity: 0.7;">Preço Promocional</p>
-                    <div style="font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0;">R$ 150,00</div>
-                    <button class="buy-btn" style="padding: 20px;" onclick="openCheckout('CURSO MODDING ANDROID', '150,00')">ADQUIRIR CURSO</button>
-                </div>
-            </div>
+        <div class="mod-promo">
+            <div><h3 style="margin:0; color:var(--accent);">CRIE SEU PRÓPRIO MOD</h3><p style="margin:0; opacity:0.7;">Curso completo de Injeção e Bypass.</p></div>
+            <button class="buy-btn" style="width:auto; padding: 12px 30px; clip-path:none;" onclick="togglePage('modding')">VER CURSO</button>
+        </div>
+
+        <nav class="categories-grid">
+            <button class="cat-btn active" onclick="showCat('cat1', this)">BYPASS IOS</button>
+            <button class="cat-btn" onclick="showCat('cat2', this)">PAINEL ANDROID</button>
+            <button class="cat-btn" onclick="showCat('cat3', this)">PAINEL IOS</button>
+            <button class="cat-btn" onclick="showCat('cat4', this)">HS PESCOÇO ANDROID</button>
+            <button class="cat-btn" onclick="showCat('cat5', this)">HS PESCOÇO IOS</button>
+        </nav>
+
+        <div id="cat1" class="products-grid active">
+            <div class="card"><h3>BYPASS iOS 30 DIAS</h3><div class="price">R$ 400,00</div><button class="buy-btn" onclick="openCheckout('BYPASS iOS 30 DIAS', '400,00')">Adquirir</button></div>
+            <div class="card"><h3>BYPASS iOS PERMANENTE</h3><div class="price">R$ 750,00</div><button class="buy-btn" onclick="openCheckout('BYPASS iOS PERMANENTE', '750,00')">Adquirir</button></div>
+        </div>
+        <div id="cat2" class="products-grid">
+            <div class="card">
+    <h3>PAINEL ANDROID 01 DIA</h3>
+    <div class="price">R$ 19,90</div>
+    <button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 01 DIA', '19,90')">Adquirir</button>
+</div>
+          <div class="card"><h3>PAINEL ANDROID 10 DIAS</h3><div class="price">R$ 39,90</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 10 DIAS', '39,90')">Adquirir</button></div>
+          <div class="card"><h3>PAINEL ANDROID 30 DIAS</h3><div class="price">R$ 79,90</div><button class="buy-btn" onclick="openCheckout('PAINEL ANDROID 30 DIAS', '79,90')">Adquirir</button></div>
+        </div>
+        <div id="cat3" class="products-grid">
+          <div class="card"><h3>PAINEL iOS 1 DIA</h3><div class="price">R$ 19,90</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 1 DIA', '19,90')">Adquirir</button></div>
+         <div class="card"><h3>PAINEL iOS 7 DIAS</h3><div class="price">R$ 44,90</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 30 DIAS', '44,90')">Adquirir</button></div>
+          <div class="card"><h3>PAINEL iOS 30 DIAS</h3><div class="price">R$ 89,90</div><button class="buy-btn" onclick="openCheckout('PAINEL iOS 30 DIAS', '89,90')">Adquirir</button></div>
+        </div>
+        <div id="cat4" class="products-grid">
+            <div class="card"><h3>HS PESCOÇO ANDROID 7 DIAS</h3><div class="price">R$ 18,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO ANDROID 7 DIAS', '18,90')">Adquirir</button></div>
+             <div class="card"><h3>HS PESCOÇO ANDROID 15 DIAS</h3><div class="price">R$ 28,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO ANDROID 15 DIAS', '28,90')">Adquirir</button></div>
+          <div class="card"><h3>HS PESCOÇO ANDROID 30 DIAS</h3><div class="price">R$ 38,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO ANDDOID 30 DIAS', '38,90')">Adquirir</button></div>
+        </div>
+        <div id="cat5" class="products-grid">
+               <div class="card"><h3>HS PESCOÇO IOS 30 DIAS</h3><div class="price">R$ 34,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO IOS 30 DIAS', '34,90')">Adquirir</button></div>
+          <div class="card"><h3>HS PESCOÇO IOS 90 DIAS</h3><div class="price">R$ 49,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO IOS 90 DIAS', '49,90')">Adquirir</button></div>
+          <div class="card"><h3>HS PESCOÇO IOS + UPDATE</h3><div class="price">R$ 59,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO + UPDATE', '59,90')">Adquirir</button></div>
+          <div class="card"><h3>HS PESCOÇO IOS + BYPASS</h3><div class="price">R$ 79,90</div><button class="buy-btn" onclick="openCheckout('HS PESCOÇO IOS + BYPASS', '79,90')">Adquirir</button></div>
+        
+        
         </div>
     </div>
 
-    <div class="modal-overlay" id="checkoutModal">
-        <div class="checkout-box">
-            <div id="legalSection">
-                <h2>⚠️ TERMOS JURÍDICOS</h2>
-                <p>Item: <strong id="legalProdName" style="color:var(--primary)">...</strong></p>
-                <div class="legal-box">
-                    • Pagamento via PIX deve ser no valor EXATO de <strong id="legalProdPrice">...</strong>.<br>
-                    • Estornos falsos ou má fé resultam em bloqueio de HWID e medidas judiciais (Estelionato Art. 171).<br>
-                    • Ao prosseguir, você aceita que este produto é virtual e não reembolsável.
-                </div>
-                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin: 20px 0; font-size: 0.85rem; text-align: left;">
-                    <input type="checkbox" id="legalCheck" onchange="validateLegal()">
-                    <span>Li e aceito os termos. Entendo que o envio do valor incorreto causará a perda do dinheiro sem estorno.</span>
-                </label>
-                <button id="proceedToPayBtn" class="buy-btn" disabled onclick="showPix()">CONCORDAR E PAGAR</button>
-                <button onclick="closeCheckout()" style="background:transparent; color:#555; border:none; margin-top:15px; cursor:pointer; font-weight: bold; width:100%">CANCELAR</button>
-            </div>
-
-            <div id="pixSection">
-                <div id="prodName" style="color: var(--primary); font-weight: 900; font-size: 1.4rem; text-transform: uppercase;">...</div>
-                <div id="prodPrice" style="font-size: 2.8rem; font-weight: 900; margin: 15px 0;">...</div>
-                <div style="background: #111; padding: 15px; border-radius: 8px; border: 1px solid #222;">
-                    <small style="color:#888;">CHAVE PIX (CLIQUE PARA COPIAR)</small>
-                    <div id="pixKey" style="word-break: break-all; font-family: monospace; color: var(--pix); margin: 10px 0; font-size: 0.9rem;">826f68ba-d43e-44cf-b99e-d099ed91b70c</div>
-                    <button onclick="copyPix()" style="background: var(--primary); border:none; color:white; padding:12px; font-weight: 900; width: 100%; cursor:pointer;">COPIAR CHAVE</button>
-                </div>
-                <button class="buy-btn" style="margin-top: 20px;" onclick="goToDiscord()">ENVIAR COMPROVANTE (DISCORD)</button>
-                <button onclick="closeCheckout()" style="background:transparent; color:#555; border:none; margin-top:15px; cursor:pointer; font-weight: bold; width:100%">VOLTAR</button>
-            </div>
+    <div id="page-modding" style="display:none; animation: fadeInUp 0.6s;">
+        <button class="buy-btn" style="width:auto; clip-path:none; margin-bottom:20px; background: #333;" onclick="togglePage('home')">← VOLTAR</button>
+        <div class="mod-promo" style="display: block; text-align: center;">
+            <h2 style="color:white; margin-bottom: 20px;">CURSO DESENVOLVEDOR MOD</h2>
+            <p>🚀 Módulo 1: Estrutura de Injeção e Libs<br>🛡️ Módulo 2: Bypass Anti-Ban Avançado</p>
+            <div class="price">R$ 150,00</div>
+            <button class="buy-btn" style="max-width: 300px; margin: 20px auto;" onclick="openCheckout('PAINEL MODDING', '150,00')">ADQUIRIR AGORA</button>
         </div>
     </div>
+</div>
 
-    <script>
-        // --- ANTI-CRACK SYSTEM ---
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false; // F12
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
-            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
-        };
+<div class="modal-overlay" id="checkoutModal">
+    <div class="checkout-box">
+        <div id="legalSection">
+            <h2 style="color:var(--warning); margin:0 0 20px 0;">TERMOS JURÍDICOS</h2>
+            <input type="text" id="titularNome" class="gamer-input" placeholder="NOME DO TITULAR DO BANCO" oninput="validateLegal()">
+            <div class="legal-box">
+                • Valor deve ser EXATAMENTE <b id="legalProdPrice" style="color:white;"></b>.<br>
+                • Nomes divergentes resultam em retenção do saldo.<br>
+                • Sem reembolso: Produto Virtual / Entrega Imediata.
+            </div>
+            <label style="display:flex; gap:10px; text-align:left; font-size:0.75rem; margin:20px 0; cursor:pointer;">
+                <input type="checkbox" id="legalCheck" onchange="validateLegal()">
+                <span>Li e aceito. Entendo que o envio incorreto causará a perda do saldo sem estorno.</span>
+            </label>
+            <button id="proceedBtn" class="buy-btn" disabled onclick="handlePayment()">CONCORDAR E GERAR PIX</button>
+            <button onclick="closeCheckout()" style="background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-weight: bold; width:100%">CANCELAR</button>
+        </div>
 
-        const CHAVE_PIX = "826f68ba-d43e-44cf-b99e-d099ed91b70c";
+        <div id="pixSection" style="display:none;">
+            <div class="checkout-info">
+                <div class="info-row"><span>PRODUTO:</span><b id="finalProd"></b></div>
+                <div class="info-row"><span>TITULAR:</span><b id="finalTitular"></b></div>
+                <div class="info-row"><span>ID TRANS.:</span><b id="finalID"></b></div>
+                <div class="info-row" style="margin-top:10px; border-top:1px solid #333; padding-top:10px;">
+                    <span>VALOR A PAGAR:</span><b id="finalPrice" style="font-size:1.4rem;"></b>
+                </div>
+            </div>
+            <div id="qrcode"></div>
+            <div style="background:#000; padding:12px; border-radius:4px; font-size:0.75rem; border:1px solid #222; margin-bottom:15px; word-break:break-all; color:var(--pix); font-family:monospace;">826f68ba-d43e-44cf-b99e-d099ed91b70c</div>
+            <button class="buy-btn" style="background:var(--pix); margin-bottom:10px; clip-path:none;" onclick="copyPix()">COPIAR CHAVE PIX</button>
+            <button class="buy-btn" style="background:var(--discord); clip-path:none;" onclick="window.open('https://discord.gg/6jUdx6marp')">ENVIAR COMPROVANTE</button>
+            <button onclick="closeCheckout()" style="background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-weight: bold;">VOLTAR</button>
+        </div>
+    </div>
+</div>
 
-        function showCat(id, btn) {
-            document.querySelectorAll('.products-grid').forEach(g => g.classList.remove('active'));
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
+<script>
+    const firebaseConfig = { apiKey: "AIzaSyAoGCo4_tMeaXZsJAa2ckzi7E6zG0vQ44A", authDomain: "rodrigues-shop.firebaseapp.com", projectId: "rodrigues-shop", storageBucket: "rodrigues-shop.firebasestorage.app", messagingSenderId: "856611658964", appId: "1:856611658964:web:87faee9416fc751b0a2f41" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // SISTEMA MANUTENÇÃO REATIVO
+    db.collection("config").doc("site1").onSnapshot(doc => {
+        if(doc.exists && doc.data().maintenance === true) {
+            document.getElementById('mt-screen').style.display = 'flex';
+            document.getElementById('main-site').style.display = 'none';
+        } else {
+            document.getElementById('mt-screen').style.display = 'none';
+            document.getElementById('main-site').style.display = 'block';
         }
+    });
 
-        function togglePage(page) {
-            if(page === 'modding') {
-                document.getElementById('page-home').style.display = 'none';
-                document.getElementById('page-modding').style.display = 'block';
-            } else {
-                document.getElementById('page-home').style.display = 'block';
-                document.getElementById('page-modding').style.display = 'none';
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function openCheckout(name, price) {
-            document.getElementById('legalSection').style.display = 'block';
-            document.getElementById('pixSection').style.display = 'none';
-            document.getElementById('legalCheck').checked = false;
-            document.getElementById('proceedToPayBtn').disabled = true;
-            document.getElementById('legalProdName').innerText = name;
-            document.getElementById('legalProdPrice').innerText = 'R$ ' + price;
-            document.getElementById('prodName').innerText = name;
-            document.getElementById('prodPrice').innerText = 'R$ ' + price;
-            document.getElementById('checkoutModal').style.display = 'flex';
-        }
-
-        function validateLegal() {
-            document.getElementById('proceedToPayBtn').disabled = !document.getElementById('legalCheck').checked;
-        }
-
-        function showPix() {
-            document.getElementById('legalSection').style.display = 'none';
-            document.getElementById('pixSection').style.display = 'block';
-        }
-
-        function closeCheckout() {
-            document.getElementById('checkoutModal').style.display = 'none';
-        }
-
-        function copyPix() {
-            navigator.clipboard.writeText(CHAVE_PIX);
-            alert("Chave PIX copiada!");
-        }
-
-        function goToDiscord() {
-            window.open("https://discord.gg/6jUdx6marp", "_blank");
-        }
-    </script>
+    let currentBuy = {};
+    function showCat(id, btn) {
+        document.querySelectorAll('.products-grid, .cat-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active'); btn.classList.add('active');
+    }
+    function togglePage(p) {
+        document.getElementById('page-home').style.display = p === 'home' ? 'block' : 'none';
+        document.getElementById('page-modding').style.display = p === 'modding' ? 'block' : 'none';
+        window.scrollTo(0,0);
+    }
+    function openCheckout(name, price) {
+        currentBuy = { name, price, id: "R" + Math.floor(Math.random() * 1000000) };
+        document.getElementById('legalProdPrice').innerText = 'R$ ' + price;
+        document.getElementById('checkoutModal').style.display = 'flex';
+        document.getElementById('legalSection').style.display = 'block';
+        document.getElementById('pixSection').style.display = 'none';
+    }
+    function validateLegal() {
+        const n = document.getElementById('titularNome').value.length >= 5;
+        const c = document.getElementById('legalCheck').checked;
+        document.getElementById('proceedBtn').disabled = !(n && c);
+    }
+    async function handlePayment() {
+        const nome = document.getElementById('titularNome').value;
+        await db.collection("vendas_logs").add({ id: currentBuy.id, titular: nome, produto: currentBuy.name, valor: currentBuy.price, data: new Date().toLocaleString() });
+        document.getElementById('finalProd').innerText = currentBuy.name;
+        document.getElementById('finalTitular').innerText = nome;
+        document.getElementById('finalID').innerText = currentBuy.id;
+        document.getElementById('finalPrice').innerText = "R$ " + currentBuy.price;
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById('qrcode'), { text: "826f68ba-d43e-44cf-b99e-d099ed91b70c", width: 180, height: 180 });
+        document.getElementById('legalSection').style.display = 'none';
+        document.getElementById('pixSection').style.display = 'block';
+    }
+    function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
+    function copyPix() { navigator.clipboard.writeText("826f68ba-d43e-44cf-b99e-d099ed91b70c"); alert("Pix Copiado!"); }
+</script>
 </body>
 </html>
