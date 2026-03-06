@@ -1,348 +1,137 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodrigues Shop | Elite Performance Digital</title>
-    
+    <title>Rodrigues Shop | Elite Performance</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600&display=swap');
-
-        :root {
-            --neon: #22c55e;
-            --dark-pure: #050505;
-            --card-bg: #0a0a0a;
-            --border-color: rgba(34, 197, 94, 0.15);
-        }
-
-        /* Reset e Scrollbar Gamer */
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; cursor: default; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--dark-pure); }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon); }
-
-        body { 
-            background-color: var(--dark-pure); 
-            color: #d1d1d1; 
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden; 
-        }
-
-        .font-gamer { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
-        .font-logo { font-family: 'Orbitron', sans-serif; }
-
-        /* Background Estilo Monite com Grid e Scanlines */
-        .master-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #0c1a0c 0%, #050505 100%);
-        }
-        .grid-overlay {
-            position: absolute; inset: 0;
-            background-image: linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
-            background-size: 45px 45px;
-        }
-
-        /* Efeitos de Hover e Neon */
-        .neon-text { text-shadow: 0 0 15px rgba(34, 197, 94, 0.6); }
-        .card-elite {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative; overflow: hidden;
-        }
-        .card-elite:hover {
-            border-color: var(--neon);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.1);
-        }
-
-        /* Botão Estilo Corte Gamer */
-        .btn-cut {
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-            transition: 0.3s;
-        }
-        .btn-cut:hover { filter: brightness(1.3); transform: translateX(5px); }
-
-        /* Modais e Toasts */
-        .modal-overlay {
-            backdrop-filter: blur(12px);
-            background: rgba(0,0,0,0.85);
-            display: none; opacity: 0; z-index: 100;
-        }
-        
-        /* Animações de Status */
-        .status-pulse {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--neon);
-            box-shadow: 0 0 10px var(--neon);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
+        body { background: #000; color: #888; font-family: 'Rajdhani', sans-serif; }
+        .font-gamer { font-family: 'Orbitron', sans-serif; }
+        .neon-green { color: #22c55e; }
+        .card-monite { background: rgba(10,10,10,0.9); border: 1px solid #1a1a1a; transition: 0.3s; }
+        .card-monite:hover { border-color: #22c55e; box-shadow: 0 0 20px rgba(34,197,94,0.1); }
+        #modal-pix { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .grid-bg { background-image: linear-gradient(#111 1px, transparent 1px), linear-gradient(90deg, #111 1px, transparent 1px); background-size: 40px 40px; position: fixed; inset: 0; z-index: -1; }
     </style>
 </head>
 <body>
+    <div class="grid-bg"></div>
 
-    <div class="master-bg"><div class="grid-overlay"></div></div>
-
-    <div id="custom-toast" class="fixed top-8 left-1/2 -translate-x-1/2 z-[200] opacity-0 translate-y-[-100%] transition-all duration-500">
-        <div class="bg-zinc-900 border border-green-500/30 px-8 py-3 rounded-full flex items-center gap-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-            <div id="toast-led" class="status-pulse"></div>
-            <span id="toast-text" class="font-gamer font-bold text-white tracking-widest text-xs">SISTEMA ATIVO</span>
-        </div>
-    </div>
-
-    <nav class="fixed w-full z-50 border-b border-white/5 bg-black/40 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center shadow-lg shadow-green-600/20">
-                    <i class="fas fa-crosshairs text-black text-xl"></i>
-                </div>
-                <span class="text-2xl font-logo font-bold tracking-tighter text-white uppercase">Rodrigues<span class="text-green-500">Shop</span></span>
-            </div>
-            
-            <div class="hidden lg:flex gap-10 font-gamer font-bold text-[11px] tracking-[2px]">
-                <a href="#home" class="text-green-500 hover:brightness-125 transition">Início</a>
-                <a href="#loja" class="hover:text-green-500 transition">Produtos</a>
-                <a href="#features" class="hover:text-green-500 transition">Vantagens</a>
-                <a href="#status" class="hover:text-green-500 transition italic underline decoration-green-500/50">Server Status</a>
-            </div>
-
-            <button class="bg-zinc-800 border border-zinc-700 hover:bg-green-600 hover:text-black hover:border-green-600 px-6 py-2 rounded-lg font-gamer font-bold text-[11px] transition duration-500">
-                ÁREA DO CLIENTE
-            </button>
+    <nav class="p-6 border-b border-zinc-900 bg-black/80 flex justify-between items-center sticky top-0 z-50">
+        <div class="text-green-500 font-gamer text-xl italic tracking-tighter uppercase">monite</div>
+        <div class="flex gap-6 text-[10px] font-bold uppercase tracking-[3px] text-white">
+            <a href="#loja">Loja</a>
+            <a href="#status">Status</a>
         </div>
     </nav>
 
-    <section id="home" class="relative pt-48 pb-32 px-8 overflow-hidden">
-        <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
-            <div class="inline-flex items-center gap-3 bg-green-500/5 border border-green-500/20 px-5 py-2 rounded-full mb-10 animate__animated animate__fadeInDown">
-                <span class="status-pulse"></span>
-                <span class="text-[10px] font-bold uppercase tracking-[4px] text-green-500">Rodrigues Elite v2.4</span>
+    <section id="loja" class="py-24 px-6 text-center">
+        <h1 class="text-6xl font-gamer text-white italic mb-10 tracking-tighter uppercase">Rodrigues <span class="neon-green">Shop</span></h1>
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="card-monite p-10 rounded-2xl">
+                <h3 class="text-white font-bold text-xl mb-4 italic uppercase">Painel VIP (30D)</h3>
+                <p class="text-3xl font-bold neon-green mb-8 font-gamer">R$ 59,90</p>
+                <button onclick="processarVenda('Painel VIP', 59.90)" class="w-full bg-green-600 text-black font-bold py-4 rounded-lg hover:brightness-125 transition">COMPRAR AGORA</button>
             </div>
-
-            <h1 class="text-7xl md:text-[110px] font-logo font-bold text-white leading-none mb-10 tracking-tighter">
-                MODERNO. <br> <span class="text-green-500 italic neon-text">INDETECTÁVEL.</span>
-            </h1>
-
-            <p class="max-w-3xl text-zinc-400 text-lg md:text-xl leading-relaxed mb-16 animate__animated animate__fadeInUp">
-                Aumente seu desempenho com a tecnologia de injeção externa mais segura do mercado brasileiro. 
-                Desenvolvido para jogadores que buscam o topo do ranking sem riscos.
-            </p>
-
-            <div class="flex flex-col md:flex-row gap-8 w-full justify-center items-center">
-                <a href="#loja" class="btn-cut bg-green-600 text-black px-12 py-6 font-gamer font-bold text-xl w-full md:w-auto shadow-2xl shadow-green-600/30">ADQUIRIR ACESSO</a>
-                <a href="#" class="btn-cut bg-zinc-900 border border-zinc-700 text-white px-12 py-6 font-gamer font-bold text-xl w-full md:w-auto hover:bg-zinc-800">DISCORD OFICIAL</a>
+            <div class="card-monite p-10 rounded-2xl border-green-500">
+                <h3 class="text-white font-bold text-xl mb-4 italic uppercase">Combo Permanente</h3>
+                <p class="text-3xl font-bold neon-green mb-8 font-gamer">R$ 149,90</p>
+                <button onclick="processarVenda('Combo Permanente', 149.90)" class="w-full bg-green-600 text-black font-bold py-4 rounded-lg hover:brightness-125 transition">COMPRAR AGORA</button>
             </div>
         </div>
     </section>
 
-    <section id="loja" class="py-32 bg-black/20">
-        <div class="max-w-7xl mx-auto px-8">
-            <div class="flex items-center gap-6 mb-24">
-                <div class="h-[2px] w-20 bg-green-600"></div>
-                <h2 class="text-4xl font-logo text-white italic uppercase tracking-tighter">Produtos <span class="text-green-500">Premium</span></h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="card-elite p-12 rounded-[2rem] flex flex-col h-full">
-                    <div class="flex justify-between items-start mb-10">
-                        <i class="fas fa-ghost text-4xl text-green-500"></i>
-                        <span class="bg-zinc-800 text-[10px] font-bold px-3 py-1 rounded border border-zinc-700 tracking-widest uppercase">30 DIAS</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Injetor VIP Mobile</h3>
-                    <p class="text-zinc-500 text-sm mb-10 flex-grow leading-relaxed">Painel completo com Aimbot, ESP, e Antiban 100% atualizado para a última season.</p>
-                    
-                    <div class="mb-10 pt-6 border-t border-zinc-800">
-                        <p class="text-[10px] text-zinc-600 uppercase font-bold tracking-widest mb-1 italic">Investimento Único</p>
-                        <div class="flex items-end gap-2 text-white">
-                            <span class="text-4xl font-bold font-gamer">R$ 59,90</span>
-                        </div>
-                    </div>
-                    
-                    <button onclick="openCheckout('VIP Mobile', 59.90)" class="w-full py-5 bg-green-600 text-black font-gamer font-bold text-lg rounded-xl hover:bg-white transition duration-500">COMPRAR AGORA</button>
-                </div>
-
-                <div class="card-elite p-12 rounded-[2rem] border-green-500 bg-zinc-900/50 scale-105 shadow-[0_30px_60px_rgba(0,0,0,0.6)] relative overflow-hidden">
-                    <div class="absolute top-0 right-10 bg-green-600 text-black text-[9px] font-bold px-6 py-2 rounded-b-lg uppercase tracking-widest">Recomendado</div>
-                    <i class="fas fa-crown text-4xl text-green-500 mb-10"></i>
-                    <h3 class="text-2xl font-bold text-white mb-4 italic">Combo Permanente</h3>
-                    <ul class="space-y-4 mb-10 text-sm">
-                        <li class="flex items-center gap-3"><i class="fas fa-check-double text-green-500"></i> Chave Vitalícia (Lifetime)</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check-double text-green-500"></i> Todos os Mods Incluídos</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check-double text-green-500"></i> Suporte Prioritário 24/7</li>
-                    </ul>
-                    
-                    <div class="mb-10 pt-6 border-t border-zinc-800">
-                        <div class="flex items-end gap-2 text-white">
-                            <span class="text-5xl font-bold font-gamer">R$ 149,90</span>
-                        </div>
-                    </div>
-                    
-                    <button onclick="openCheckout('Combo Permanente', 149.90)" class="w-full py-5 bg-white text-black font-gamer font-bold text-lg rounded-xl hover:bg-green-500 transition duration-500">GARANTIR ACESSO</button>
-                </div>
-
-                <div class="card-elite p-12 rounded-[2rem] flex flex-col h-full">
-                    <i class="fas fa-shield-virus text-4xl text-green-500 mb-10"></i>
-                    <h3 class="text-2xl font-bold text-white mb-4">Pack Antiban Pro</h3>
-                    <p class="text-zinc-500 text-sm mb-10 flex-grow leading-relaxed">Módulo adicional focado exclusivamente em proteção de conta e bypass de log.</p>
-                    
-                    <div class="mb-10 pt-6 border-t border-zinc-800">
-                        <span class="text-4xl font-bold font-gamer text-white">R$ 39,90</span>
-                    </div>
-                    
-                    <button onclick="openCheckout('Antiban Pro', 39.90)" class="w-full py-5 bg-zinc-800 text-white border border-zinc-700 font-gamer font-bold text-lg rounded-xl hover:bg-green-600 hover:text-black transition duration-500">COMPRAR AGORA</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="checkout-modal" class="fixed inset-0 modal-overlay flex items-center justify-center p-6">
-        <div class="bg-[#0c0c0c] border border-zinc-800 w-full max-w-xl rounded-[2.5rem] p-12 shadow-2xl relative animate__animated animate__zoomIn">
-            <button onclick="closeModal()" class="absolute top-8 right-8 text-zinc-600 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+    <div id="modal-pix">
+        <div class="bg-zinc-950 border border-zinc-800 p-8 rounded-3xl max-w-sm w-full text-center relative">
+            <button onclick="fechar()" class="absolute top-6 right-6 text-zinc-600 hover:text-white"><i class="fas fa-times"></i></button>
+            <h2 class="text-white font-gamer text-sm mb-6 italic tracking-tighter">PAGAMENTO <span class="text-green-500">PIX AUTOMÁTICO</span></h2>
             
-            <div class="text-center mb-10">
-                <h4 class="text-2xl font-logo text-white italic mb-2">Finalizar <span class="text-green-500">Compra</span></h4>
-                <p id="checkout-prod-name" class="text-zinc-500 uppercase text-[10px] font-bold tracking-[3px]">PRODUTO: VIP MOBILE</p>
+            <div id="qrcode-area" class="bg-white p-3 inline-block rounded-xl mb-6 shadow-xl"></div>
+
+            <div class="bg-black p-4 rounded-xl border border-zinc-800 mb-6 text-left">
+                <p class="text-[8px] neon-green font-bold uppercase mb-2">Copia e Cola:</p>
+                <div class="flex gap-2">
+                    <input id="pix-input" readonly value="GERANDO..." class="w-full bg-transparent text-white text-[10px] outline-none overflow-hidden">
+                    <button onclick="copy()" class="text-green-500"><i class="fas fa-copy"></i></button>
+                </div>
             </div>
 
-            <div class="space-y-8">
-                <div class="relative">
-                    <label class="text-[9px] font-bold text-green-500 uppercase tracking-widest mb-3 block italic">E-mail de Entrega</label>
-                    <input type="email" id="cust-email" placeholder="seu-email@gmail.com" 
-                        class="w-full bg-black/50 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:border-green-600 transition font-medium">
-                </div>
-
-                <div class="bg-zinc-900/80 p-8 rounded-3xl border border-zinc-800 flex justify-between items-center">
-                    <div>
-                        <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Total via Pix</p>
-                        <p id="checkout-price" class="text-3xl font-bold text-white font-gamer">R$ 59,90</p>
-                    </div>
-                    <div class="flex flex-col items-end">
-                        <img src="https://logospng.org/download/pix/logo-pix-1024.png" class="h-6 opacity-30 invert mb-2">
-                        <span class="text-[8px] font-bold text-zinc-600 uppercase tracking-widest">Processado por Elite Pay</span>
-                    </div>
-                </div>
-
-                <button onclick="execPay()" id="pay-btn" class="w-full bg-green-600 text-black py-6 rounded-2xl font-gamer font-bold text-xl hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] transition transform active:scale-95">
-                    GERAR PAGAMENTO INSTANTÂNEO
-                </button>
+            <div class="flex items-center justify-center gap-3 text-xs italic">
+                <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                <span id="status-label" class="text-zinc-500">Aguardando aprovação...</span>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <script>
+        const API_KEY = "ep_efb82bc9f89f0c69daaa531eb8fd56d1";
+        const CLIENT_ID = "eps_3d4800dac85c661d73c4b6322245b09d15eda5dbc86a34cc731f9ec55dcf23d1";
 
-        // SUA CONFIGURAÇÃO FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyAoGCo4_tMeaXZsJAa2ckzi7E6zG0vQ44A",
-            authDomain: "rodrigues-shop.firebaseapp.com",
-            databaseURL: "https://rodrigues-shop-default-rtdb.firebaseio.com",
-            projectId: "rodrigues-shop",
-            storageBucket: "rodrigues-shop.firebasestorage.app",
-            messagingSenderId: "856611658964",
-            appId: "1:856611658964:web:87faee9416fc751b0a2f41"
-        };
+        async function processarVenda(produto, preco) {
+            const email = prompt("E-mail para entrega da Key:");
+            if(!email || !email.includes('@')) return alert("E-mail inválido!");
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        let currentOrder = { name: "", price: 0 };
-
-        // UI Manager
-        window.toast = (msg) => {
-            const t = document.getElementById('custom-toast');
-            document.getElementById('toast-text').innerText = msg;
-            t.style.opacity = '1';
-            t.style.transform = 'translate(-50%, 0)';
-            setTimeout(() => {
-                t.style.opacity = '0';
-                t.style.transform = 'translate(-50%, -100%)';
-            }, 5000);
-        };
-
-        window.openCheckout = (name, price) => {
-            currentOrder = { name, price };
-            document.getElementById('checkout-prod-name').innerText = `PRODUTO: ${name}`;
-            document.getElementById('checkout-price').innerText = `R$ ${price.toFixed(2)}`;
-            const m = document.getElementById('checkout-modal');
-            m.style.display = 'flex';
-            setTimeout(() => m.style.opacity = '1', 10);
-        };
-
-        window.closeModal = () => {
-            const m = document.getElementById('checkout-modal');
-            m.style.opacity = '0';
-            setTimeout(() => m.style.display = 'none', 400);
-        };
-
-        window.execPay = async () => {
-            const email = document.getElementById('cust-email').value;
-            const btn = document.getElementById('pay-btn');
-
-            if (!email || !email.includes('@')) {
-                toast("E-MAIL INVÁLIDO");
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "PROCESSANDO...";
-
+            document.getElementById('modal-pix').style.display = 'flex';
+            
             try {
-                // 1. Salva no seu Banco de Dados (Firebase)
-                const salesRef = ref(db, 'vendas');
-                const newSaleRef = push(salesRef);
-                
-                await set(newSaleRef, {
-                    id_interno: newSaleRef.key,
-                    email_cliente: email,
-                    produto: currentOrder.name,
-                    valor: currentOrder.price,
-                    status: "Aguardando Pagamento",
-                    metodo: "Elite Pay",
-                    data: new Date().toISOString()
+                // Chamada direta para gerar o Pix na sua conta Elite Pay
+                const response = await fetch('https://api.elitepaybr.com/v1/checkout/pix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEY}` },
+                    body: JSON.stringify({
+                        client_id: CLIENT_ID,
+                        amount: preco,
+                        email: email,
+                        reference: produto
+                    })
                 });
 
-                // 2. Integração Elite Pay (Com seu ID)
-                const ELITE_CLIENT_ID = "eps_3d4800dac85c661d73c4b6322245b09d15eda5dbc86a34cc731f9ec55dcf23d1";
-                const checkoutUrl = `https://checkout.elitepay.com.br/pay?id=${ELITE_CLIENT_ID}&price=${currentOrder.price}&ext_id=${newSaleRef.key}&email=${email}`;
+                const data = await response.json();
                 
-                toast("PEDIDO REGISTRADO! REDIRECIONANDO...");
-                
-                setTimeout(() => {
-                    window.location.href = checkoutUrl;
-                }, 1500);
+                // 2 & 3. QR Code e Copia e Cola Gerados
+                document.getElementById('pix-input').value = data.pix_code;
+                document.getElementById('qrcode-area').innerHTML = "";
+                new QRCode(document.getElementById("qrcode-area"), { text: data.pix_code, width: 160, height: 160 });
+
+                // 4 & 5. Aprovação e Envio
+                monitorarPagamento(data.id, email, produto);
 
             } catch (err) {
+                // FALLBACK SE A API ESTIVER FORA (DNS ERROR)
                 console.error(err);
-                // Tratamento amigável para o erro do protocolo file://
-                if(window.location.protocol === "file:") {
-                    toast("ERRO: O FIREBASE EXIGE HOSPEDAGEM (HTTP)");
-                } else {
-                    toast("ERRO NA CONEXÃO COM O SERVIDOR");
-                }
-                btn.disabled = false;
-                btn.innerText = "TENTAR NOVAMENTE";
+                alert("Erro ao conectar com a ElitePay. Verifique se o site está rodando em HTTPS.");
+                document.getElementById('modal-pix').style.display = 'none';
             }
-        };
+        }
 
-        // Efeitos Iniciais GSAP
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.from(".card-elite", {
-            scrollTrigger: "#loja",
-            y: 100, opacity: 0, duration: 1.2, stagger: 0.3, ease: "power4.out"
-        });
+        function monitorarPagamento(id, email, prod) {
+            const check = setInterval(async () => {
+                const res = await fetch(`https://api.elitepaybr.com/v1/checkout/status/${id}`, {
+                    headers: { 'Authorization': `Bearer ${API_KEY}` }
+                });
+                const status = await res.json();
 
-        window.onload = () => toast("RODRIGUES SHOP CARREGADA");
+                if(status.paid === true) {
+                    clearInterval(check);
+                    document.getElementById('status-label').innerText = "PAGO COM SUCESSO!";
+                    document.getElementById('status-label').className = "neon-green font-bold";
+                    alert(`APROVADO! A Key de ${prod} foi enviada para ${email}`);
+                }
+            }, 5000);
+        }
+
+        function copy() {
+            const input = document.getElementById('pix-input');
+            input.select();
+            document.execCommand('copy');
+            alert("Pix copiado!");
+        }
+
+        function fechar() { document.getElementById('modal-pix').style.display = 'none'; }
     </script>
 </body>
 </html>
