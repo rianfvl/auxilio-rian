@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>kaisen xit</title>
+    
+    <title>Kaisen Xit | Elite Cheats</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -12,79 +13,118 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        :root { --blue: #3b82f6; --dark: #05070a; --purple: #a855f7; }
-        body { background: var(--dark); color: #e2e8f0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --blue: #3b82f6; --dark: #05070a; }
+        body { background: var(--dark); color: #e2e8f0; font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-modern { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(13, 17, 26, 0.98); border: 1px solid #1e293b; backdrop-filter: blur(15px); }
-        .product-card { border-radius: 24px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: #0d111a; border: 1px solid #1e293b; height: 100%; display: flex; flex-direction: column; }
-        .product-card:hover { transform: translateY(-5px); border-color: var(--blue); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2); }
-        .btn-main { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); transition: 0.3s; box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4); }
-        .btn-main:active { transform: scale(0.92); }
         
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
-        .toast { background: #0d111a; border-left: 4px solid var(--blue); color: white; padding: 16px 24px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; border: 1px solid #1e293b; min-width: 250px; }
-        .plan-button { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: 1rem; margin-bottom: 0.75rem; }
-        .plan-button:hover { background: rgba(59, 130, 246, 0.1); border-color: var(--blue); transform: scale(1.02); }
+        .product-card { 
+            background: #0d111a; 
+            border: 1px solid #1e293b; 
+            border-radius: 24px; 
+            transition: 0.4s; 
+        }
+        .product-card:hover { border-color: var(--blue); transform: translateY(-5px); }
+        
+        .btn-main { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); transition: 0.3s; }
+        
+        .category-pill {
+            padding: 8px 20px;
+            border-radius: 99px;
+            border: 1px solid #1e293b;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .category-pill.active { background: var(--blue); border-color: var(--blue); color: white; }
+
+        .plan-button {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            transition: 0.3s;
+        }
+        .plan-button:hover { background: rgba(59, 130, 246, 0.1); border-color: var(--blue); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4">
+    <div id="toast-container" class="fixed top-5 right-5 z-[999]"></div>
 
-    <div id="toast-container"></div>
-
-    <nav class="flex justify-between items-center mb-10 px-2 max-w-6xl mx-auto animate__animated animate__fadeInDown">
+    <nav class="flex justify-between items-center mb-10 max-w-6xl mx-auto pt-4">
         <div>
-            <h1 class="text-2xl font-black text-blue-500 font-modern italic tracking-tighter uppercase">Cheats Kaisen</h1>
-            <p class="text-[8px] font-bold text-gray-500 uppercase tracking-[0.3em]">Empresa Especializada em Cheats</p>
+            <h1 class="text-2xl font-black text-blue-500 font-modern italic uppercase">Kaisen Xit</h1>
+            <p class="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Elite Cheat Solutions</p>
         </div>
         <button onclick="openCart()" class="relative bg-blue-500/10 p-4 rounded-2xl border border-blue-500/20">
-            <i class="fas fa-shopping-basket text-blue-500 text-xl"></i>
-            <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#05070a]">0</span>
+            <i class="fas fa-shopping-basket text-blue-500"></i>
+            <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
         </button>
     </nav>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto mb-20" id="productsGrid">
+    <section class="max-w-6xl mx-auto mb-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass p-4 rounded-2xl text-center">
+            <i class="fas fa-shield-virus text-blue-500 mb-2"></i>
+            <p class="text-[9px] font-bold uppercase">100% Seguro</p>
         </div>
+        <div class="glass p-4 rounded-2xl text-center">
+            <i class="fas fa-bolt text-blue-500 mb-2"></i>
+            <p class="text-[9px] font-bold uppercase">Auto-Entrega</p>
+        </div>
+        <div class="glass p-4 rounded-2xl text-center">
+            <i class="fas fa-headset text-blue-500 mb-2"></i>
+            <p class="text-[9px] font-bold uppercase">Suporte 24h</p>
+        </div>
+        <div class="glass p-4 rounded-2xl text-center">
+            <i class="fas fa-microchip text-blue-500 mb-2"></i>
+            <p class="text-[9px] font-bold uppercase">Antiban Rev</p>
+        </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto mb-8 flex gap-3 overflow-x-auto pb-2">
+        <div onclick="filterCat('Todos')" class="category-pill active" id="pill-Todos">Todos</div>
+        <div onclick="filterCat('iOS')" class="category-pill" id="pill-iOS">iOS</div>
+        <div onclick="filterCat('Android')" class="category-pill" id="pill-Android">Android</div>
+        <div onclick="filterCat('Auxiliares')" class="category-pill" id="pill-Auxiliares">Auxiliares</div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto" id="productsGrid"></div>
 
     <div id="planModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 hidden">
         <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closePlans()"></div>
-        <div class="glass w-full max-w-sm rounded-[32px] relative z-20 p-8 animate__animated animate__zoomIn animate__faster">
-            <h2 id="planTitle" class="text-xl font-black font-modern text-blue-500 italic uppercase mb-2 text-center">Planos</h2>
-            <p class="text-[10px] text-gray-500 text-center uppercase font-bold mb-6 tracking-widest">Escolha a duração</p>
+        <div class="glass w-full max-w-sm rounded-[32px] relative z-20 p-8 animate__animated animate__zoomIn">
+            <h2 id="planTitle" class="text-xl font-black font-modern text-blue-500 italic uppercase mb-6 text-center">Planos</h2>
             <div id="planOptions"></div>
-            <button onclick="closePlans()" class="w-full mt-4 text-gray-600 font-bold text-[10px] uppercase">Voltar</button>
+            <button onclick="closePlans()" class="w-full mt-4 text-gray-600 font-bold text-[10px] uppercase">Fechar</button>
         </div>
     </div>
 
-    <div id="modal" class="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4 hidden">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="closeCart()"></div>
-        <div class="glass w-full max-w-lg rounded-t-[40px] md:rounded-[40px] relative z-10 overflow-hidden animate__animated animate__slideInUp">
-            <div class="p-8 pb-12">
-                <div class="flex justify-between items-center mb-8 font-modern italic text-blue-500 uppercase">
-                    <h2 class="text-xl font-black">Finalizar Compra</h2>
-                    <button onclick="closeCart()" class="text-gray-500 text-3xl">&times;</button>
+    <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/90" onclick="closeCart()"></div>
+        <div class="glass w-full max-w-lg rounded-[40px] relative z-10 p-8 animate__animated animate__slideInUp">
+            <h2 class="text-xl font-black font-modern text-blue-500 uppercase mb-6">Carrinho</h2>
+            <div id="step-1">
+                <div id="cartDisplay" class="space-y-2 mb-6 max-h-40 overflow-y-auto"></div>
+                <input type="text" id="nome" placeholder="Seu Nome" class="w-full bg-black/50 border border-gray-800 p-4 rounded-xl mb-3 outline-none focus:border-blue-500">
+                <input type="text" id="contato" placeholder="@ Seu Discord" class="w-full bg-black/50 border border-gray-800 p-4 rounded-xl mb-6 outline-none focus:border-blue-500 text-blue-400">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="font-bold text-gray-500 uppercase">Total:</span>
+                    <span id="totalText" class="text-2xl font-black italic">R$ 0,00</span>
                 </div>
-                <div id="step-1" class="space-y-6">
-                    <div id="cartDisplay" class="space-y-2 max-h-48 overflow-y-auto"></div>
-                    <div class="space-y-3 pt-4 border-t border-white/5">
-                        <input type="text" id="nome" placeholder="Seu Nome" class="w-full bg-black/50 border border-gray-800 p-4 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <input type="text" id="contato" placeholder="@ Seu Discord" class="w-full bg-black/50 border border-gray-800 p-4 rounded-xl outline-none focus:border-blue-500 text-sm text-blue-400">
-                        <div class="flex justify-between items-center py-4 px-2">
-                            <span class="text-xs font-bold text-gray-500 uppercase">Total:</span>
-                            <span id="totalText" class="text-2xl font-black text-white italic">R$ 0,00</span>
-                        </div>
-                    </div>
-                    <button onclick="generatePIX()" id="btnSubmit" class="btn-main w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest italic">Gerar Pagamento PIX</button>
-                </div>
-                <div id="step-2" class="hidden text-center space-y-6 animate__animated animate__fadeIn">
-                    <div class="bg-white p-4 rounded-3xl inline-block animate__animated animate__pulse animate__infinite">
-                        <img id="qrCode" src="" class="w-40 h-40">
-                    </div>
-                    <div class="text-left bg-black/40 p-5 rounded-2xl border border-gray-800 relative">
-                        <p id="pixCode" class="text-[10px] text-blue-400 break-all font-mono leading-tight pr-10">...</p>
-                        <button onclick="copyPix()" class="absolute right-4 top-8 text-blue-500"><i class="fas fa-copy"></i></button>
-                    </div>
-                    <a href="https://discord.gg/RCQYwwZ972" target="_blank" class="block w-full bg-[#5865F2] py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest"><i class="fab fa-discord mr-2"></i> Abrir Ticket Agora</a>
-                </div>
+                <button onclick="generatePIX()" class="btn-main w-full py-5 rounded-2xl font-black uppercase italic">Pagar via PIX</button>
+            </div>
+            <div id="step-2" class="hidden text-center space-y-6">
+                <img id="qrCode" class="mx-auto bg-white p-2 rounded-xl w-40 h-40">
+                <p id="pixCode" class="text-[10px] break-all bg-black/50 p-4 rounded-xl border border-gray-800 font-mono">...</p>
+                <button onclick="copyPix()" class="text-blue-500 uppercase font-black text-xs">Copiar Código PIX</button>
+                <a href="https://discord.gg/RCQYwwZ972" target="_blank" class="block w-full bg-[#5865F2] py-4 rounded-xl font-bold uppercase">Abrir Ticket Suporte</a>
             </div>
         </div>
     </div>
@@ -92,110 +132,79 @@
     <script>
         const MINHA_CHAVE_PIX = "rianinfinite7@gmail.com";
         
+        // DADOS ORIGINAIS RESTAURADOS
         const produtos = [
-            { id: 1, nome: "FFH4X iOS", icon: "fa-apple", color: "blue", 
-                planos: [{t: "1 Dia", p: 19.90}, {t: "7 Dias", p: 39.90}, {t: "15 Dias", p: 59.90}, {t: "30 Dias", p: 79.90}] },
-            { id: 2, nome: "FFH4X ANDROID", icon: "fa-android", color: "green", 
-                planos: [{t: "1 Dia", p: 19.90}, {t: "10 Dias", p: 39.90}, {t: "30 Dias", p: 79.90}] },
-            { id: 3, nome: "BYPASS iOS", icon: "fa-shield-halved", color: "red", 
-                planos: [{t: "1 Dia", p: 85.00}, {t: "7 Dias", p: 300.00}, {t: "30 Dias", p: 600.00}] },
-            { id: 4, nome: "proxy iOS", icon: "fa-network-wired", color: "blue", 
-                planos: [{t: "7 Dias", p: 29.90}, {t: "30 Dias", p: 69.90}] },
-            { id: 5, nome: "hs pescoço android", icon: "fa-crosshairs", color: "purple", 
-                planos: [{t: "7 Dias", p: 14.90}, {t: "30 Dias", p: 39.90}] },
-            { id: 6, nome: "hs peito android", icon: "fa-bullseye", color: "purple", 
-                planos: [{t: "7 Dias", p: 14.90}, {t: "30 Dias", p: 39.90}] },
-            { id: 7, nome: "auxilio iOS", icon: "fa-hand-holding-medical", color: "blue", 
-                planos: [{t: "7 Dias", p: 7.50}, {t: "30 Dias", p: 14.50}] },
-            { id: 8, nome: "auxilio android", icon: "fa-hand-holding-medical", color: "green", 
-                planos: [{t: "7 Dias", p: 7.50}, {t: "30 Dias", p: 14.50}] }
+            { id: 1, cat: "iOS", nome: "FFH4X iOS", icon: "fa-apple", planos: [{t: "1 Dia", p: 19.90}, {t: "7 Dias", p: 39.90}, {t: "15 Dias", p: 59.90}, {t: "30 Dias", p: 79.90}] },
+            { id: 2, cat: "Android", nome: "FFH4X ANDROID", icon: "fa-android", planos: [{t: "1 Dia", p: 19.90}, {t: "10 Dias", p: 39.90}, {t: "30 Dias", p: 79.90}] },
+            { id: 3, cat: "iOS", nome: "BYPASS iOS", icon: "fa-shield-halved", planos: [{t: "1 Dia", p: 85.00}, {t: "7 Dias", p: 300.00}, {t: "30 Dias", p: 600.00}] },
+            { id: 4, cat: "iOS", nome: "proxy iOS", icon: "fa-network-wired", planos: [{t: "7 Dias", p: 29.90}, {t: "30 Dias", p: 69.90}] },
+            { id: 5, cat: "Android", nome: "hs pescoço android", icon: "fa-crosshairs", planos: [{t: "7 Dias", p: 14.90}, {t: "30 Dias", p: 39.90}] },
+            { id: 6, cat: "Android", nome: "hs peito android", icon: "fa-bullseye", planos: [{t: "7 Dias", p: 14.90}, {t: "30 Dias", p: 39.90}] },
+            { id: 7, cat: "Auxiliares", nome: "auxilio iOS", icon: "fa-hand-holding-medical", planos: [{t: "7 Dias", p: 7.50}, {t: "30 Dias", p: 14.50}] },
+            { id: 8, cat: "Auxiliares", nome: "auxilio android", icon: "fa-hand-holding-medical", planos: [{t: "7 Dias", p: 7.50}, {t: "30 Dias", p: 14.50}] }
         ];
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAoGCo4_tMeaXZsJAa2ckzi7E6zG0vQ44A",
-            databaseURL: "https://rodrigues-shop-default-rtdb.firebaseio.com",
-            projectId: "rodrigues-shop",
-        };
+        const firebaseConfig = { databaseURL: "https://rodrigues-shop-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         let cart = [];
 
-        function renderProducts() {
+        function renderProducts(cat = 'Todos') {
             const grid = document.getElementById('productsGrid');
-            grid.innerHTML = produtos.map(p => `
-                <div class="product-card p-6 animate__animated animate__fadeInUp">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="bg-blue-500/10 p-4 rounded-2xl"><i class="fas ${p.icon} text-3xl text-blue-500"></i></div>
-                        <span class="text-[9px] font-black bg-blue-500 text-white px-3 py-1 rounded-full uppercase italic font-modern">Elite</span>
+            const lista = cat === 'Todos' ? produtos : produtos.filter(p => p.cat === cat);
+            
+            grid.innerHTML = lista.map(p => `
+                <div class="product-card p-6">
+                    <div class="flex justify-between mb-4">
+                        <div class="bg-blue-500/10 p-3 rounded-xl"><i class="fas ${p.icon} text-blue-500"></i></div>
+                        <span class="text-[8px] font-black uppercase text-gray-500">${p.cat}</span>
                     </div>
-                    <h3 class="text-lg font-black uppercase mb-2 italic font-modern">${p.nome}</h3>
-                    <p class="text-[10px] text-gray-500 mb-6 leading-relaxed">Alta performance e antiban garantido para o seu dispositivo.</p>
-                    <div class="mt-auto pt-6 border-t border-white/5 flex justify-between items-center">
-                        <span class="text-blue-400 font-black italic text-sm">R$ ${p.planos[0].p.toFixed(2)}+</span>
-                        <button onclick="openPlanSelector(${p.id})" class="btn-main px-5 py-3 rounded-xl font-black text-[9px] uppercase italic">Comprar</button>
+                    <h3 class="text-sm font-black uppercase mb-6 italic">${p.nome}</h3>
+                    <div class="flex justify-between items-center border-t border-white/5 pt-4">
+                        <span class="text-xs font-bold">R$ ${p.planos[0].p.toFixed(2)}+</span>
+                        <button onclick="openPlanSelector(${p.id})" class="btn-main px-4 py-2 rounded-lg text-[10px] font-black uppercase">Comprar</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function showMsg(text) {
-            const container = document.getElementById('toast-container');
-            const t = document.createElement('div');
-            t.className = 'toast animate__animated animate__fadeInRight';
-            t.innerHTML = `<i class="fas fa-check-circle text-blue-500"></i><span class="text-[10px] font-bold uppercase">${text}</span>`;
-            container.appendChild(t);
-            setTimeout(() => { t.classList.replace('animate__fadeInRight','animate__fadeOutRight'); setTimeout(()=>t.remove(),500); }, 3000);
+        function filterCat(cat) {
+            document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            document.getElementById('pill-' + cat).classList.add('active');
+            renderProducts(cat);
         }
 
         function openPlanSelector(id) {
-            const prod = produtos.find(p => p.id === id);
-            const modal = document.getElementById('planModal');
-            const container = document.getElementById('planOptions');
-            document.getElementById('planTitle').innerText = prod.nome;
-            container.innerHTML = prod.planos.map(pl => `
-                <button onclick="addToCart('${prod.nome}', '${pl.t}', ${pl.p})" class="plan-button">
-                    <span class="font-bold text-xs uppercase text-white">${pl.t}</span>
-                    <span class="text-blue-400 font-black italic">R$ ${pl.p.toFixed(2)}</span>
+            const p = produtos.find(prod => prod.id === id);
+            document.getElementById('planTitle').innerText = p.nome;
+            document.getElementById('planOptions').innerHTML = p.planos.map(pl => `
+                <button onclick="addToCart('${p.nome}', '${pl.t}', ${pl.p})" class="plan-button">
+                    <span class="font-bold text-xs uppercase">${pl.t}</span>
+                    <span class="text-blue-400 font-black">R$ ${pl.p.toFixed(2)}</span>
                 </button>
             `).join('');
-            modal.classList.remove('hidden');
-            document.body.classList.add('modal-open');
+            document.getElementById('planModal').classList.remove('hidden');
         }
 
-        function addToCart(nome, tempo, preco) {
-            cart.push({ name: `${nome} (${tempo})`, price: preco });
+        function addToCart(n, t, p) {
+            cart.push({ name: `${n} (${t})`, price: p });
             document.getElementById('cartCount').innerText = cart.length;
             closePlans();
-            showMsg("Adicionado ao Carrinho");
+            showMsg("Adicionado ao carrinho!");
         }
 
         function openCart() {
-            if(cart.length === 0) return showMsg("Carrinho Vazio");
-            const display = document.getElementById('cartDisplay');
+            if(cart.length === 0) return;
             let total = 0;
-            display.innerHTML = cart.map((item, index) => {
-                total += item.price;
-                return `<div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5 mb-2">
-                    <span class="text-[10px] font-bold uppercase">${item.name}</span>
-                    <button onclick="removeItem(${index})" class="text-red-500/50"><i class="fas fa-trash text-xs"></i></button>
+            document.getElementById('cartDisplay').innerHTML = cart.map((i, idx) => {
+                total += i.price;
+                return `<div class="flex justify-between p-3 bg-white/5 rounded-xl text-[10px] font-bold uppercase">
+                    <span>${i.name}</span>
+                    <span class="text-blue-500">R$ ${i.price.toFixed(2)}</span>
                 </div>`;
             }).join('');
             document.getElementById('totalText').innerText = `R$ ${total.toFixed(2)}`;
             document.getElementById('modal').classList.remove('hidden');
-        }
-
-        function removeItem(index) {
-            cart.splice(index, 1);
-            document.getElementById('cartCount').innerText = cart.length;
-            cart.length === 0 ? closeCart() : openCart();
-        }
-
-        function closePlans() { document.getElementById('planModal').classList.add('hidden'); document.body.classList.remove('modal-open'); }
-        function closeCart() { document.getElementById('modal').classList.add('hidden'); document.body.classList.remove('modal-open'); }
-        
-        function copyPix() {
-            navigator.clipboard.writeText(MINHA_CHAVE_PIX);
-            showMsg("Chave PIX Copiada!");
         }
 
         function generatePIX() {
@@ -203,18 +212,30 @@
             const c = document.getElementById('contato').value;
             if(!n || !c) return showMsg("Preencha os dados!");
             
-            const id = "KSN-" + Math.floor(1000 + Math.random() * 9000);
+            const id = "KSN-" + Math.floor(Math.random() * 9000);
             db.ref('pedidos/' + id).set({
                 id, cliente: n, contato: c,
                 itens: cart.map(i => i.name).join(', '),
-                total: cart.reduce((acc, i) => acc + i.price, 0),
-                status: "⌛", data: new Date().toLocaleString()
+                total: cart.reduce((a, b) => a + b.price, 0),
+                data: new Date().toLocaleString()
             }).then(() => {
                 document.getElementById('pixCode').innerText = MINHA_CHAVE_PIX;
-                document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${MINHA_CHAVE_PIX}`;
+                document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?data=${MINHA_CHAVE_PIX}`;
                 document.getElementById('step-1').classList.add('hidden');
                 document.getElementById('step-2').classList.remove('hidden');
             });
+        }
+
+        function closePlans() { document.getElementById('planModal').classList.add('hidden'); }
+        function closeCart() { document.getElementById('modal').classList.add('hidden'); }
+        function copyPix() { navigator.clipboard.writeText(MINHA_CHAVE_PIX); showMsg("PIX Copiado!"); }
+        function showMsg(m) { 
+            const t = document.getElementById('toast-container');
+            const box = document.createElement('div');
+            box.className = "glass p-4 rounded-xl mb-2 text-[10px] font-black uppercase border-l-4 border-blue-500 animate__animated animate__fadeInRight";
+            box.innerText = m;
+            t.appendChild(box);
+            setTimeout(() => box.remove(), 3000);
         }
 
         renderProducts();
