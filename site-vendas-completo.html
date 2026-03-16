@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Loja Premium - Softwares e Ferramentas Exclusivas" />
+    <meta name="theme-color" content="#10B981" />
+    <title>Loja Premium - Softwares</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            --primary: #10B981;
+            --primary-hover: #059669;
+            --primary-light: #D1FAE5;
+            --primary-lighter: #ECFDF5;
+            --bg: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --text: #1F2937;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        header.nav-header {
+            height: 70px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--card-shadow);
+        }
+
+        .header-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-spacer { flex: 1; }
+
+        .cart-icon {
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .cart-icon:hover { color: var(--primary); }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .hero {
+            margin-top: 70px;
+            padding: 60px 32px;
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--bg) 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .products-section {
+            padding: 60px 32px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-4px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .product-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .duration-selector {
+            margin-bottom: 16px;
+        }
+
+        .duration-selector label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .duration-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .duration-btn {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+
+        .duration-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .duration-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .btn-buy {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-buy:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+
+        .notification.active { display: flex; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification-icon { font-size: 20px; flex-shrink: 0; }
+        .notification-content { flex: 1; }
+        .notification-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .notification-message { font-size: 13px; color: var(--text-secondary); }
+        .notification.success .notification-icon { color: var(--success); }
+        .notification.error .notification-icon { color: var(--danger); }
+
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 40px 32px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 28px; }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="nav-header">
+        <div class="header-brand">
+            <i class="ph ph-shopping-bag"></i>
+            Loja Premium
+        </div>
+        <div class="nav-spacer"></div>
+        <div class="cart-icon" onclick="abrirCarrinho()">
+            <i class="ph ph-shopping-cart"></i>
+            <span class="cart-count" id="cart-count" style="display: none;">0</span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Bem-vindo à Loja Premium</h1>
+        <p>Softwares e ferramentas exclusivas de alta qualidade</p>
+    </section>
+
+    <section class="products-section">
+        <h2 class="section-title">Nossos Produtos</h2>
+        <p class="section-subtitle">Escolha a duração e clique em "Comprar"</p>
+        <div class="products-grid" id="products-grid"></div>
+    </section>
+
+    <div class="notification" id="notification">
+        <div class="notification-icon">
+            <i class="ph ph-check-circle"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title" id="notification-title">Sucesso</div>
+            <div class="notification-message" id="notification-message">Operação realizada</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Loja Premium. Todos os direitos reservados. | Pagamentos seguros com InfinitePay</p>
+    </footer>
+
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoGCo4_tMeaXZsJAa2ckzi7E6zG0vQ44A",
+            authDomain: "rodrigues-shop.firebaseapp.com",
+            projectId: "rodrigues-shop",
+            storageBucket: "rodrigues-shop.firebasestorage.app",
+            messagingSenderId: "856611658964",
+            appId: "1:856611658964:web:87faee9416fc751b0a2f41"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const INFINITEPAY_HANDLE = "kenia-carla-h05";
+        const REDIRECT_URL = window.location.origin + "/?pagamento=sucesso";
+
+        let carrinho = [];
+        let selectedDurations = {};
+
+        // Produtos com variações
+        const produtos = [
+            {
+                id: 1,
+                nome: "FFH4X ANDROID",
+                descricao: "Software exclusivo para Android",
+                imagem: "",
+                durações: [
+                    { dias: 1, preco: 19.90 },
+                    { dias: 7, preco: 39.90 },
+                    { dias: 30, preco: 79.90 }
+                ]
+            },
+            {
+                id: 2,
+                nome: "FFH4X IOS",
+                descricao: "Software exclusivo para iOS",
+                imagem: "",
+                durações: [
+                    { dias: 1, preco: 19.90 },
+                    { dias: 7, preco: 39.90 },
+                    { dias: 30, preco: 79.90 }
+                ]
+            },
+            {
+                id: 3,
+                nome: "BYPASS IOS",
+                descricao: "Bypass para iOS",
+                imagem: "",
+                durações: [
+                    { dias: 1, preco: 85.00 },
+                    { dias: 7, preco: 300.00 },
+                    { dias: 30, preco: 600.00 }
+                ]
+            },
+            {
+                id: 4,
+                nome: "PROXY IOS",
+                descricao: "Proxy para iOS",
+                imagem: "",
+                durações: [
+                    { dias: 7, preco: 29.90 },
+                    { dias: 30, preco: 69.90 }
+                ]
+            },
+            {
+                id: 5,
+                nome: "HS PESCOÇO XIAOMI",
+                descricao: "Harness Sensor Pescoço Xiaomi",
+                imagem: "",
+                durações: [
+                    { dias: 7, preco: 14.90 },
+                    { dias: 30, preco: 27.90 }
+                ]
+            },
+            {
+                id: 6,
+                nome: "HS PEITO XIAOMI",
+                descricao: "Harness Sensor Peito Xiaomi",
+                imagem: "",
+                durações: [
+                    { dias: 7, preco: 14.90 },
+                    { dias: 30, preco: 27.90 }
+                ]
+            },
+            {
+                id: 7,
+                nome: "AUXILIO ANDROID",
+                descricao: "Auxílio para Android",
+                imagem: "",
+                durações: [
+                    { dias: 7, preco: 7.50 },
+                    { dias: 30, preco: 14.50 }
+                ]
+            },
+            {
+                id: 8,
+                nome: "AUXILIO IOS",
+                descricao: "Auxílio para iOS",
+                imagem: "",
+                durações: [
+                    { dias: 7, preco: 7.50 },
+                    { dias: 30, preco: 14.50 }
+                ]
+            }
+        ];
+
+        function renderizarProdutos() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            produtos.forEach(produto => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                const duracaoHtml = produto.durações.map(d => `
+                    <button class="duration-btn" onclick="selecionarDuracao(${produto.id}, ${d.dias}, ${d.preco})">
+                        ${d.dias}d
+                    </button>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="product-image">
+                        ${produto.imagem ? `<img src="${sanitizarHTML(produto.imagem)}" alt="${sanitizarHTML(produto.nome)}" />` : `<div style="font-size: 48px; color: var(--primary);">📦</div>`}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${sanitizarHTML(produto.nome)}</h3>
+                        <p class="product-description">${sanitizarHTML(produto.descricao)}</p>
+                        <div class="duration-selector">
+                            <label>Duração:</label>
+                            <div class="duration-options">
+                                ${duracaoHtml}
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <span class="product-price" id="preco-${produto.id}">Selecione</span>
+                            <button class="btn-buy" onclick="iniciarCheckout(${produto.id})" id="btn-${produto.id}" disabled>
+                                Comprar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selecionarDuracao(produtoId, dias, preco) {
+            selectedDurations[produtoId] = { dias, preco };
+            
+            // Atualizar UI
+            document.querySelectorAll(`[onclick*="selecionarDuracao(${produtoId}"]`).forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Atualizar preço e habilitar botão
+            document.getElementById(`preco-${produtoId}`).textContent = `R$ ${preco.toFixed(2).replace('.', ',')}`;
+            document.getElementById(`btn-${produtoId}`).disabled = false;
+        }
+
+        async function iniciarCheckout(produtoId) {
+            const produto = produtos.find(p => p.id === produtoId);
+            const duracao = selectedDurations[produtoId];
+
+            if (!duracao) {
+                mostrarNotificacao('Erro', 'Selecione uma duração', 'error');
+                return;
+            }
+
+            try {
+                const btn = event.target;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="ph ph-spinner"></i> Processando...';
+
+                const orderNSU = `order-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        handle: INFINITEPAY_HANDLE,
+                        items: [{
+                            quantity: 1,
+                            price: Math.round(duracao.preco * 100),
+                            description: `${sanitizarHTML(produto.nome)} - ${duracao.dias} dias`
+                        }],
+                        order_nsu: orderNSU,
+                        redirect_url: REDIRECT_URL
+                    })
+                });
+
+                if (!response.ok) throw new Error('Erro ao gerar link');
+
+                const data = await response.json();
+                const checkoutUrl = data.url;
+
+                if (!checkoutUrl) throw new Error('URL não recebida');
+
+                // Salvar no Firebase
+                await db.collection('vendas_logs').add({
+                    data: new Date().toLocaleDateString('pt-BR'),
+                    hora: new Date().toLocaleTimeString('pt-BR'),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    titular: 'Pendente de Pagamento',
+                    email: 'pendente@checkout.com',
+                    telefone: 'Pendente',
+                    produto: `${sanitizarHTML(produto.nome)} - ${duracao.dias} dias`,
+                    valor: duracao.preco.toFixed(2).replace('.', ','),
+                    metodo_pagamento: 'infinitepay',
+                    order_nsu: orderNSU,
+                    status: 'pendente',
+                    checkout_url: checkoutUrl
+                });
+
+                mostrarNotificacao('Redirecionando', 'Você será redirecionado para o checkout...', 'success');
+                setTimeout(() => { window.location.href = checkoutUrl; }, 1500);
+
+                carrinho.push({ ...produto, duracao });
+                atualizarCarrinho();
+
+            } catch (erro) {
+                console.error('Erro:', erro);
+                mostrarNotificacao('Erro', 'Falha ao processar pagamento', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="ph ph-shopping-cart"></i> Comprar';
+            }
+        }
+
+        function atualizarCarrinho() {
+            const count = carrinho.length;
+            const badge = document.getElementById('cart-count');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function abrirCarrinho() {
+            if (carrinho.length === 0) {
+                mostrarNotificacao('Carrinho', 'Seu carrinho está vazio', 'success');
+                return;
+            }
+            let mensagem = 'Itens no carrinho:\n\n';
+            let total = 0;
+            carrinho.forEach((item, index) => {
+                const preco = item.duracao.preco;
+                mensagem += `${index + 1}. ${item.nome} (${item.duracao.dias}d) - R$ ${preco.toFixed(2)}\n`;
+                total += preco;
+            });
+            mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
+            alert(mensagem);
+        }
+
+        function sanitizarHTML(texto) {
+            const div = document.createElement('div');
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+
+        function mostrarNotificacao(titulo, mensagem, tipo = 'success') {
+            const notif = document.getElementById('notification');
+            const icon = notif.querySelector('.notification-icon i');
+            
+            document.getElementById('notification-title').textContent = titulo;
+            document.getElementById('notification-message').textContent = mensagem;
+
+            notif.classList.remove('success', 'error');
+            notif.classList.add(tipo);
+
+            if (tipo === 'success') {
+                icon.className = 'ph ph-check-circle';
+            } else {
+                icon.className = 'ph ph-warning-circle';
+            }
+
+            notif.classList.add('active');
+            setTimeout(() => { notif.classList.remove('active'); }, 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarProdutos();
+            console.log('Loja de Softwares Premium carregada');
+        });
+    </script>
+</body>
+</html>
